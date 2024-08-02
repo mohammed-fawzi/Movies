@@ -121,7 +121,17 @@ extension MoviesListViewController {
                 self?.showAlert(withTitle: "Error!", andErrorMessage: message)
             }.store(in: &subscriptions)
         
-    
+        viewModel?.showEmptyState
+            .receive(on: RunLoop.main)
+            .sink{ [weak self] _ in
+                self?.showEmptyState()
+            }.store(in: &subscriptions)
     }
 }
 
+extension MoviesListViewController {
+    private func showEmptyState(){
+        emptyStateView.isHidden = false
+        emptyStateView.tryAgainAction = viewModel?.tryAgainButtonDidTapped
+    }
+}

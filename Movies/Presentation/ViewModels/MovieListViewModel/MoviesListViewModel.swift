@@ -35,7 +35,11 @@ class MoviesListViewModel: MoviesListViewModelProtocol {
     var showErrorAlert: AnyPublisher<String,Never> {
         return showErrorAlertSubject.eraseToAnyPublisher()
     }
-
+    private var showEmptyStateSubject = PassthroughSubject<Void,Never>()
+    var showEmptyState: AnyPublisher<Void,Never> {
+        return showEmptyStateSubject.eraseToAnyPublisher()
+    }
+    
     init(useCase: MoviesListUseCaseProtocol, coordinator: Coordinator) {
         self.useCase = useCase
         self.coordinator = coordinator
@@ -63,7 +67,13 @@ extension MoviesListViewModel {
     }
     
     private func handleFetchingMoviesFailure(error: MoviesError){
+        switch error {
+        case .noCacheFound:
+            guard movies.isEmpty else {return}
+            showEmptyStateSubject.send(())
+        default:
             showErrorAlertSubject.send(error.customMessage)
+        }
     }
 }
 
@@ -81,6 +91,10 @@ extension MoviesListViewModel {
         guard index == movies.count - 1 && currentPage < totalPages else {return}
         showFooterActivityIndicatorSubject.send(true)
         getMovies(page: currentPage + 1)
+    }
+    
+    func tryAgainButtonDidTapped(){
+        getMovies(page: 1)
     }
     
 
