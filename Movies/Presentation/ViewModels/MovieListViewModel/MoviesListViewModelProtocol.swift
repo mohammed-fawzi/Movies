@@ -18,4 +18,5 @@ protocol MoviesListViewModelProtocol {
     func didSelectCell(atIndex index: Int)
     func getNumberOfMovies() -> Int
     func getMovie(atIndex index: Int) -> Movie
+    func refresh()
 }

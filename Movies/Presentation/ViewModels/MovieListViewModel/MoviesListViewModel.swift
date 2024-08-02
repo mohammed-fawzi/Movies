@@ -83,6 +83,11 @@ extension MoviesListViewModel {
         getMovies(page: currentPage + 1)
     }
     
+
+    func refresh() {
+        movies.removeAll()
+        getMovies(page: 1)
+    }
 }
 
 // MARK: - Getters

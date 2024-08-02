@@ -17,6 +17,7 @@ class MoviesListViewController: UIViewController {
     // MARK: -Properties
     let cellID = "MovieTableViewCell"
     let footerSpinner = UIActivityIndicatorView(style: .medium)
+    let refreshControl = UIRefreshControl()
     var viewModel: MoviesListViewModelProtocol?
     private var subscriptions = Set<AnyCancellable>()
     
@@ -32,6 +33,9 @@ class MoviesListViewController: UIViewController {
         tabBarController?.title = tabBarItem.title
     }
     
+    @objc func refresh(_ sender: AnyObject) {
+        viewModel?.refresh()
+    }
 }
 
 // MARK: - UI Setup
@@ -39,6 +43,7 @@ extension MoviesListViewController {
     private func setupUI(){
         setupTableView()
         setupFooterSpinner()
+        setupRefreshControl()
     }
     
     private func setupTableView(){
@@ -55,6 +60,15 @@ extension MoviesListViewController {
         footerSpinner.style = .medium
         footerSpinner.hidesWhenStopped = true
     }
+    
+    private func setupRefreshControl(){
+        let colorAtrribute = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh",attributes: colorAtrribute )
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        refreshControl.tintColor = .white
+        tableView.addSubview(refreshControl)
+    }
+
 }
 
 // MARK: - DataSource
@@ -90,6 +104,7 @@ extension MoviesListViewController {
         viewModel?.reloadTable
             .receive(on: RunLoop.main)
             .sink {[weak self] _ in
+                self?.refreshControl.endRefreshing()
                 self?.emptyStateView.isHidden = true
                 self?.tableView.reloadData()
             }.store(in: &subscriptions)
@@ -106,6 +121,7 @@ extension MoviesListViewController {
                 self?.showAlert(withTitle: "Error!", andErrorMessage: message)
             }.store(in: &subscriptions)
         
+    
     }
 }
 
