@@ -20,5 +20,7 @@ protocol MoviesListViewModelProtocol {
     func getNumberOfMovies() -> Int
     func getMovie(atIndex index: Int) -> Movie
     func tryAgainButtonDidTapped()
+    func searchButtonDidTapped(withText: String)
+    func cancelSearchButtonDidTapped()
     func refresh()
 }

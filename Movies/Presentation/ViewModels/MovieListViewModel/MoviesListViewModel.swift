@@ -9,6 +9,10 @@ import Foundation
 import Combine
 
 
+enum ListMode {
+    case normal
+    case search
+}
 
 class MoviesListViewModel: MoviesListViewModelProtocol {
     
@@ -17,7 +21,10 @@ class MoviesListViewModel: MoviesListViewModelProtocol {
     private let coordinator: Coordinator
     private var currentPage = 1
     private var totalPages = 1
-
+    private var mode: ListMode = .normal
+    private var searchResults: [Movie] = [] {
+        didSet {reloadSubject.send(())}
+    }
     private var movies: [Movie] = [] {
         didSet {reloadSubject.send(())}
     }
@@ -97,8 +104,19 @@ extension MoviesListViewModel {
         getMovies(page: 1)
     }
     
-
+    func searchButtonDidTapped(withText text: String){
+        guard !text.isEmpty else {return}
+        mode = .search
+        searchResults = movies.filter { $0.title?.lowercased().contains(text.lowercased()) ?? false}
+    }
+    
+    func cancelSearchButtonDidTapped(){
+        mode = .normal
+        searchResults.removeAll()
+    }
+    
     func refresh() {
+        searchResults.removeAll()
         movies.removeAll()
         getMovies(page: 1)
     }
@@ -107,10 +125,10 @@ extension MoviesListViewModel {
 // MARK: - Getters
 extension MoviesListViewModel {
     func getNumberOfMovies() -> Int{
-         movies.count
+        mode == .normal ? movies.count : searchResults.count
     }
     
     func getMovie(atIndex index: Int) -> Movie {
-        movies[index]
+        mode == .normal ? movies[index] : searchResults[index]
     }
 }

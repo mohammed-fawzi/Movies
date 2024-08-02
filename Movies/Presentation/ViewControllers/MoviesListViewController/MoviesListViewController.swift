@@ -43,6 +43,7 @@ extension MoviesListViewController {
     private func setupUI(){
         setupTableView()
         setupFooterSpinner()
+        setupSearchBar()
         setupRefreshControl()
     }
     
@@ -68,7 +69,11 @@ extension MoviesListViewController {
         refreshControl.tintColor = .white
         tableView.addSubview(refreshControl)
     }
-
+    
+    private func setupSearchBar(){
+        searchBar.delegate = self
+        searchBar.searchTextField.textColor = .textPrimary
+    }
 }
 
 // MARK: - DataSource
@@ -133,5 +138,28 @@ extension MoviesListViewController {
     private func showEmptyState(){
         emptyStateView.isHidden = false
         emptyStateView.tryAgainAction = viewModel?.tryAgainButtonDidTapped
+    }
+}
+
+// MARK: - Search
+extension MoviesListViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else {return}
+        viewModel?.searchButtonDidTapped(withText: text)
+        view.endEditing(true)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        viewModel?.cancelSearchButtonDidTapped()
+        searchBar.resignFirstResponder()
     }
 }
