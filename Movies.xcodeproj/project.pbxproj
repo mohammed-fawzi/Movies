@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		716E78182C5CFD4800FA9EEB /* MovieDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716E78162C5CFD4800FA9EEB /* MovieDTO.swift */; };
+		716E78192C5CFD4800FA9EEB /* MoviesListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716E78172C5CFD4800FA9EEB /* MoviesListDTO.swift */; };
 		71BAE0012C5C154500917346 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAE0002C5C154500917346 /* AppDelegate.swift */; };
 		71BAE0032C5C154500917346 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BAE0022C5C154500917346 /* SceneDelegate.swift */; };
 		71BAE00A2C5C154700917346 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71BAE0092C5C154700917346 /* Assets.xcassets */; };
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		716E78162C5CFD4800FA9EEB /* MovieDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDTO.swift; sourceTree = "<group>"; };
+		716E78172C5CFD4800FA9EEB /* MoviesListDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesListDTO.swift; sourceTree = "<group>"; };
 		71BADFFD2C5C154500917346 /* Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71BAE0002C5C154500917346 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		71BAE0022C5C154500917346 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -85,11 +89,11 @@
 		716E77A62C5C181400FA9EEB /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				716E77AD2C5C196600FA9EEB /* Models */,
 				716E77B12C5C199A00FA9EEB /* Mappers */,
 				716E77B02C5C198900FA9EEB /* Persistance */,
 				716E77AF2C5C198500FA9EEB /* Network */,
 				716E77AE2C5C197200FA9EEB /* Repositories */,
-				716E77AD2C5C196600FA9EEB /* Models */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -141,6 +145,8 @@
 		716E77AD2C5C196600FA9EEB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				716E78162C5CFD4800FA9EEB /* MovieDTO.swift */,
+				716E78172C5CFD4800FA9EEB /* MoviesListDTO.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -355,7 +361,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				716E78192C5CFD4800FA9EEB /* MoviesListDTO.swift in Sources */,
 				71BAE0012C5C154500917346 /* AppDelegate.swift in Sources */,
+				716E78182C5CFD4800FA9EEB /* MovieDTO.swift in Sources */,
 				71BAE0032C5C154500917346 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
