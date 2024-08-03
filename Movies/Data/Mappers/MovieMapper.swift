@@ -11,13 +11,13 @@ struct MovieMapper {
    
     func map(dto: MovieDTO) -> Movie {
         let posterUrl = dto.posterPath != nil ? "https://image.tmdb.org/t/p/w500" + dto.posterPath! : nil
-        
         return Movie(id: dto.id,
                      title: dto.title,
                      overview: dto.overview,
                      score: dto.voteAverage,
                      releaseDate: dto.releaseDate,
                      language: dto.originalLanguage,
-                     posterUrl: posterUrl)
+                     posterUrl: posterUrl,
+                     genres: dto.genreIDS)
     }
 }

@@ -23,13 +23,31 @@ class MoviesListViewModel: MoviesListViewModelProtocol {
     private var currentPage = 1
     private var totalPages = 1
     private var mode: ListMode = .normal
+    private var selectedFilter: Int? = nil {
+        didSet {updateDisplayedList()}
+    }
+    // all movies fetched
+    private var allMovies: [Movie] = [] {
+        didSet {updateDisplayedList()}
+    }
+    // movies filterd from search
     private var searchResults: [Movie] = [] {
         didSet {reloadSubject.send(())}
     }
-    private var movies: [Movie] = [] {
+    // final list to be displayed for user
+    private var displayMovies: [Movie] = [] {
         didSet {reloadSubject.send(())}
     }
     
+    private func updateDisplayedList(){
+        if let filterId = selectedFilter {
+            displayMovies = allMovies.filter{
+                return $0.genres?.contains(filterId) ?? false
+            }
+        }else {
+            displayMovies = allMovies
+        }
+    }
     // MARK: - Subjects
     private var reloadSubject = PassthroughSubject<Void,Never>()
     var reloadTable: AnyPublisher<Void,Never>{
@@ -76,7 +94,7 @@ extension MoviesListViewModel {
     }
     
     private func handleFetchingMoviesSuccess(moviesList: MoviesList){
-        movies.append(contentsOf: moviesList.movies)
+        allMovies.append(contentsOf: moviesList.movies)        
         totalPages = moviesList.totalPages
         currentPage = moviesList.page
     }
@@ -84,7 +102,7 @@ extension MoviesListViewModel {
     private func handleFetchingMoviesFailure(error: MoviesError){
         switch error {
         case .noCacheFound:
-            guard movies.isEmpty else {return}
+            guard displayMovies.isEmpty else {return}
             showEmptyStateSubject.send(())
         default:
             showErrorAlertSubject.send(error.customMessage)
@@ -129,7 +147,7 @@ extension MoviesListViewModel {
     }
     
     func willShowCell(atIndex index: Int){
-        guard index == movies.count - 1 && currentPage < totalPages else {return}
+        guard index == displayMovies.count - 1 && currentPage < totalPages else {return}
         showFooterActivityIndicatorSubject.send(true)
         getMovies(page: currentPage + 1)
     }
@@ -141,7 +159,7 @@ extension MoviesListViewModel {
     func searchButtonDidTapped(withText text: String){
         guard !text.isEmpty else {return}
         mode = .search
-        searchResults = movies.filter { $0.title?.lowercased().contains(text.lowercased()) ?? false}
+        searchResults = displayMovies.filter { $0.title?.lowercased().contains(text.lowercased()) ?? false}
     }
     
     func cancelSearchButtonDidTapped(){
@@ -151,18 +169,26 @@ extension MoviesListViewModel {
     
     func refresh() {
         searchResults.removeAll()
-        movies.removeAll()
+        displayMovies.removeAll()
         getMovies(page: 1)
+    }
+    
+    func didSelectTag(withId id: Int){
+        selectedFilter = id
+    }
+    
+    func didDeselectTag(withId id: Int){
+        selectedFilter = nil
     }
 }
 
 // MARK: - Getters
 extension MoviesListViewModel {
     func getNumberOfMovies() -> Int{
-        mode == .normal ? movies.count : searchResults.count
+        mode == .normal ? displayMovies.count : searchResults.count
     }
     
     func getMovie(atIndex index: Int) -> Movie {
-        mode == .normal ? movies[index] : searchResults[index]
+        mode == .normal ? displayMovies[index] : searchResults[index]
     }
 }

@@ -15,4 +15,5 @@ struct Movie {
     var releaseDate: String?
     var language: String?
     var posterUrl: String?
+    var genres: [Int]?
 }

@@ -46,6 +46,7 @@ extension MoviesListViewController {
         setupFooterSpinner()
         setupSearchBar()
         setupRefreshControl()
+        setupFiltersView()
     }
     
     private func setupTableView(){
@@ -74,6 +75,11 @@ extension MoviesListViewController {
     private func setupSearchBar(){
         searchBar.delegate = self
         searchBar.searchTextField.textColor = .textPrimary
+    }
+    
+    private func setupFiltersView(){
+        filtersView.delegate = self
+        filtersView.allowTagSelection = true
     }
 }
 
@@ -169,4 +175,16 @@ extension MoviesListViewController: UISearchBarDelegate {
         viewModel?.cancelSearchButtonDidTapped()
         searchBar.resignFirstResponder()
     }
+}
+
+// MARK: - Filters Delegate
+extension MoviesListViewController: TagsDelegate{
+    func didSelect(tag: Tag, atIndex index: Int) {
+        viewModel?.didSelectTag(withId: tag.id)
+    }
+    
+    func didDeselect(tag: Tag, atIndex index: Int) {
+        viewModel?.didDeselectTag(withId: tag.id)
+    }
+    
 }
