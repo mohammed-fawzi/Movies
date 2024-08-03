@@ -8,9 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MoviesListViewController" customModule="banquemisr_challenge05_Movies" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MoviesListViewController" customModule="Movies" customModuleProvider="target">
             <connections>
                 <outlet property="emptyStateView" destination="W6U-Dm-urE" id="O4f-Dk-Drn"/>
+                <outlet property="filtersView" destination="idX-LT-WaC" id="gQ5-sa-xUa"/>
                 <outlet property="searchBar" destination="Tiy-48-pIA" id="VtG-Pm-s31"/>
                 <outlet property="tableView" destination="gGe-tm-yWT" id="PER-Ld-Am5"/>
                 <outlet property="view" destination="Uiy-Ca-IIp" id="2dr-cV-uDa"/>
@@ -29,11 +30,18 @@
                     <textInputTraits key="textInputTraits" returnKeyType="search"/>
                 </searchBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="200" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="gGe-tm-yWT">
-                    <rect key="frame" x="0.0" y="115" width="393" height="703"/>
+                    <rect key="frame" x="0.0" y="160" width="393" height="658"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
-                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W6U-Dm-urE" customClass="EmptyStateView" customModule="banquemisr_challenge05_Movies" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="idX-LT-WaC" userLabel="Filters View" customClass="TagsCollectionView" customModule="Movies" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="115" width="393" height="45"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="x9Q-si-Wd3"/>
+                    </constraints>
+                </view>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W6U-Dm-urE" customClass="EmptyStateView" customModule="Movies" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="115" width="393" height="703"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
@@ -41,19 +49,22 @@
             <viewLayoutGuide key="safeArea" id="TYm-7N-ZOW"/>
             <color key="backgroundColor" name="BackgroundColor"/>
             <constraints>
-                <constraint firstItem="gGe-tm-yWT" firstAttribute="top" secondItem="Tiy-48-pIA" secondAttribute="bottom" id="4IN-wY-fQe"/>
                 <constraint firstItem="Tiy-48-pIA" firstAttribute="leading" secondItem="TYm-7N-ZOW" secondAttribute="leading" id="89p-Hc-DRp"/>
                 <constraint firstItem="gGe-tm-yWT" firstAttribute="leading" secondItem="TYm-7N-ZOW" secondAttribute="leading" id="9vT-xg-sFg"/>
+                <constraint firstItem="idX-LT-WaC" firstAttribute="trailing" secondItem="TYm-7N-ZOW" secondAttribute="trailing" id="FVc-Xg-R0n"/>
+                <constraint firstItem="gGe-tm-yWT" firstAttribute="top" secondItem="idX-LT-WaC" secondAttribute="bottom" id="H53-yn-6Nr"/>
                 <constraint firstItem="W6U-Dm-urE" firstAttribute="leading" secondItem="TYm-7N-ZOW" secondAttribute="leading" id="Hlh-Y6-Tde"/>
                 <constraint firstItem="TYm-7N-ZOW" firstAttribute="trailing" secondItem="W6U-Dm-urE" secondAttribute="trailing" id="Sem-6Q-aFg"/>
+                <constraint firstItem="idX-LT-WaC" firstAttribute="leading" secondItem="TYm-7N-ZOW" secondAttribute="leading" id="aZw-m5-fQq"/>
                 <constraint firstItem="Tiy-48-pIA" firstAttribute="trailing" secondItem="TYm-7N-ZOW" secondAttribute="trailing" id="bUQ-ms-yjl"/>
                 <constraint firstItem="TYm-7N-ZOW" firstAttribute="trailing" secondItem="gGe-tm-yWT" secondAttribute="trailing" id="cBh-1h-rpX"/>
                 <constraint firstItem="W6U-Dm-urE" firstAttribute="top" secondItem="Tiy-48-pIA" secondAttribute="bottom" id="jYH-0r-gQQ"/>
                 <constraint firstItem="Tiy-48-pIA" firstAttribute="top" secondItem="TYm-7N-ZOW" secondAttribute="top" id="oQi-IF-gqu"/>
                 <constraint firstItem="TYm-7N-ZOW" firstAttribute="bottom" secondItem="W6U-Dm-urE" secondAttribute="bottom" id="qlg-Rg-8dk"/>
+                <constraint firstItem="idX-LT-WaC" firstAttribute="top" secondItem="Tiy-48-pIA" secondAttribute="bottom" id="tBm-6E-19A"/>
                 <constraint firstItem="TYm-7N-ZOW" firstAttribute="bottom" secondItem="gGe-tm-yWT" secondAttribute="bottom" id="uBd-hH-GEy"/>
             </constraints>
-            <point key="canvasLocation" x="34" y="-278"/>
+            <point key="canvasLocation" x="32.824427480916029" y="-278.16901408450707"/>
         </view>
     </objects>
     <resources>

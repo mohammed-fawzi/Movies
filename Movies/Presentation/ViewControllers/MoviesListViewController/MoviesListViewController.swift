@@ -13,6 +13,7 @@ class MoviesListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var emptyStateView: EmptyStateView!
+    @IBOutlet weak var filtersView: TagsCollectionView!
     
     // MARK: -Properties
     let cellID = "MovieTableViewCell"
