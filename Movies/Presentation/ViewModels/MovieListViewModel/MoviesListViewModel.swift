@@ -143,7 +143,8 @@ extension MoviesListViewModel {
     }
     
     func didSelectCell(atIndex index: Int){
-       //TODO: navigate to details screen
+        let movie = getMovie(atIndex: index)
+        coordinator.navigate(to: .movieDetails(movie: movie), withNavigationAction: .push)
     }
     
     func willShowCell(atIndex index: Int){

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MovieDetailsViewController" customModule="Movies" customModuleProvider="target">
+            <connections>
+                <outlet property="genresLabel" destination="PTr-08-Rgp" id="DED-AH-fp8"/>
+                <outlet property="overviewTextView" destination="2EV-OX-5OB" id="7v1-uj-wnd"/>
+                <outlet property="posterImageView" destination="62u-ZL-Isg" id="Jed-iy-ajg"/>
+                <outlet property="tagsView" destination="Zrq-f0-BrL" id="DTz-oa-K4c"/>
+                <outlet property="titleLabel" destination="yIQ-Ln-6TQ" id="DbN-h4-xTm"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="poster-placeholder-sm" translatesAutoresizingMaskIntoConstraints="NO" id="62u-ZL-Isg">
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="335"/>
+                    <accessibility key="accessibilityConfiguration" identifier="detailsPosterImage"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="335" id="g7o-KO-Znw"/>
+                    </constraints>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bq4-3g-eYo" userLabel="Info Container View">
+                    <rect key="frame" x="10" y="290" width="373" height="409"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yIQ-Ln-6TQ">
+                            <rect key="frame" x="10" y="60.000000000000007" width="353" height="26.333333333333336"/>
+                            <accessibility key="accessibilityConfiguration" identifier="detailsTitleLabel"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                            <color key="textColor" name="TextPrimaryColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genres" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PTr-08-Rgp">
+                            <rect key="frame" x="10" y="91.333333333333314" width="353" height="20.333333333333329"/>
+                            <accessibility key="accessibilityConfiguration" identifier="detailsGenresLabel"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" name="TextTernaryColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2EV-OX-5OB">
+                            <rect key="frame" x="10" y="131.66666666666669" width="353" height="150"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <accessibility key="accessibilityConfiguration" identifier="detailsOverviewTextView"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="150" id="J9l-Iw-Gsg"/>
+                            </constraints>
+                            <color key="textColor" name="TextSecondryColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zrq-f0-BrL" customClass="TagsCollectionView" customModule="Movies" customModuleProvider="target">
+                            <rect key="frame" x="10" y="301.66666666666663" width="353" height="50"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="vbu-Hr-OPC"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" name="CardPrimaryColor"/>
+                    <constraints>
+                        <constraint firstItem="Zrq-f0-BrL" firstAttribute="leading" secondItem="bq4-3g-eYo" secondAttribute="leading" constant="10" id="Byf-zM-jyc"/>
+                        <constraint firstItem="2EV-OX-5OB" firstAttribute="top" secondItem="PTr-08-Rgp" secondAttribute="bottom" constant="20" id="C9G-Mw-UGY"/>
+                        <constraint firstAttribute="trailing" secondItem="2EV-OX-5OB" secondAttribute="trailing" constant="10" id="CId-Rv-AoY"/>
+                        <constraint firstAttribute="trailing" secondItem="yIQ-Ln-6TQ" secondAttribute="trailing" constant="10" id="GaI-Qh-wjV"/>
+                        <constraint firstItem="Zrq-f0-BrL" firstAttribute="top" secondItem="2EV-OX-5OB" secondAttribute="bottom" constant="20" id="QZe-ah-RwV"/>
+                        <constraint firstItem="2EV-OX-5OB" firstAttribute="leading" secondItem="bq4-3g-eYo" secondAttribute="leading" constant="10" id="S4h-MJ-iM0"/>
+                        <constraint firstItem="PTr-08-Rgp" firstAttribute="leading" secondItem="bq4-3g-eYo" secondAttribute="leading" constant="10" id="WQW-Nn-cBm"/>
+                        <constraint firstAttribute="height" constant="409" id="cW0-I4-Z6V"/>
+                        <constraint firstItem="yIQ-Ln-6TQ" firstAttribute="leading" secondItem="bq4-3g-eYo" secondAttribute="leading" constant="10" id="l73-Bw-E0g"/>
+                        <constraint firstAttribute="trailing" secondItem="PTr-08-Rgp" secondAttribute="trailing" constant="10" id="mcr-Ei-VtV"/>
+                        <constraint firstAttribute="trailing" secondItem="Zrq-f0-BrL" secondAttribute="trailing" constant="10" id="uyG-Y5-ENo"/>
+                        <constraint firstItem="yIQ-Ln-6TQ" firstAttribute="top" secondItem="bq4-3g-eYo" secondAttribute="top" constant="60" id="wRn-T2-RCG"/>
+                        <constraint firstItem="PTr-08-Rgp" firstAttribute="top" secondItem="yIQ-Ln-6TQ" secondAttribute="bottom" constant="5" id="wfz-6U-zPV"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="15"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9v6-Wl-b9w">
+                    <rect key="frame" x="46.666666666666657" y="734" width="300" height="45"/>
+                    <color key="backgroundColor" name="ButtonPrimaryColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="300" id="5km-77-8Oa"/>
+                        <constraint firstAttribute="height" constant="45" id="cIk-oH-Jid"/>
+                    </constraints>
+                    <color key="tintColor" name="TextPrimaryColor"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="Home Page"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="8"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="HomePageButtonTapped:" destination="-1" eventType="touchUpInside" id="7tP-YP-yIL"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" name="BackgroundColor"/>
+            <accessibility key="accessibilityConfiguration" identifier="movieDetailsScreen"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="bq4-3g-eYo" secondAttribute="trailing" constant="10" id="KhT-Wg-HO7"/>
+                <constraint firstItem="62u-ZL-Isg" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="MzR-I6-EX4"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="bq4-3g-eYo" secondAttribute="bottom" constant="119" id="ajk-a6-HKP"/>
+                <constraint firstItem="9v6-Wl-b9w" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="dgr-jD-H9g"/>
+                <constraint firstItem="bq4-3g-eYo" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="10" id="ekR-gZ-xN3"/>
+                <constraint firstItem="62u-ZL-Isg" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="hhA-dt-tyH"/>
+                <constraint firstItem="9v6-Wl-b9w" firstAttribute="top" secondItem="bq4-3g-eYo" secondAttribute="bottom" constant="35" id="ops-FH-Req"/>
+                <constraint firstItem="62u-ZL-Isg" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="zfR-tm-u6l"/>
+            </constraints>
+            <point key="canvasLocation" x="-106.10687022900763" y="-12.67605633802817"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="poster-placeholder-sm" width="300" height="450"/>
+        <namedColor name="BackgroundColor">
+            <color red="0.090196078431372548" green="0.086274509803921567" blue="0.17254901960784313" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ButtonPrimaryColor">
+            <color red="0.15686274509803921" green="0.17254901960784313" blue="0.82352941176470584" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="CardPrimaryColor">
+            <color red="0.12156862745098039" green="0.12941176470588237" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="TextPrimaryColor">
+            <color red="0.99215686274509807" green="0.99215686274509807" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="TextSecondryColor">
+            <color red="0.68235294117647061" green="0.72156862745098038" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="TextTernaryColor">
+            <color red="0.36470588235294116" green="0.36078431372549019" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>

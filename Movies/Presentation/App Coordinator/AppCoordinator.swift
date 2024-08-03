@@ -11,6 +11,7 @@ enum Module{
     case trendingMovies
     case upcomingMovies
     case nowPlayingMoives
+    case movieDetails(movie: Movie)
 }
 class AppCoordinator: Coordinator {
 
@@ -30,6 +31,8 @@ class AppCoordinator: Coordinator {
             vc = appDependencyContainer.makeUpcomingMoviesListViewController()
         case .nowPlayingMoives:
             vc = appDependencyContainer.makeNowPlayingMoviesListViewController()
+        case .movieDetails(let movie):
+            vc = appDependencyContainer.makeMovieDetailsViewController(movie: movie)
         }
         return vc
     }

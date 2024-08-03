@@ -43,6 +43,10 @@ extension Coordinator {
         navigationController.viewControllers.first(where: {$0.isKind(of: viewControllerType)})
     }
 
+}
+
+// MARK: - POP back
+extension Coordinator {
     func popToRoot(animated: Bool) {
         navigationController.popToRootViewController(animated: animated)
     }
@@ -59,5 +63,14 @@ extension Coordinator {
         let targetIndex = max(0, viewControllersCount - count - 1)
         let targetViewController = navigationController.viewControllers[targetIndex]
         navigationController.popToViewController(targetViewController, animated: animated)
+    }
+}
+
+// MARK: - Browser
+extension Coordinator {
+    func openExternalURL(url: String){
+        if let url = URL(string: url) {
+            UIApplication.shared.open(url)
+        }
     }
 }

@@ -31,11 +31,20 @@ class AppDependencyContainer {
     }
     
     func makeMovieListViewController(repoType: MoviesListType)-> MoviesListViewController{
-        let appCoordinator = AppCoordinator(navigationController: navigationController, appDependencyContainer: self)
+        
         let viewModel = MoviesListViewModel(moviesListUseCase: makeMoviesListUseCase(repoType: repoType),
                                             genresUseCase: makeGenresUseCase(),
-                                            coordinator: appCoordinator)
+                                            coordinator: makeAppCoordinator())
         let vc = MoviesListViewController()
+        vc.viewModel = viewModel
+        return vc
+    }
+    
+    func makeMovieDetailsViewController(movie: Movie)-> MovieDetailsViewController{
+        let viewModel = MovieDetailsViewModel(useCase: makeMovieDetailsUseCase(),
+                                              movie: movie,
+                                              coordinator: makeAppCoordinator() )
+        let vc = MovieDetailsViewController()
         vc.viewModel = viewModel
         return vc
     }
@@ -60,6 +69,12 @@ extension AppDependencyContainer {
         return useCase
     }
     
+    func makeMovieDetailsUseCase() -> MovieUseCaseProtocol {
+        let repo = MovieRepo(networkStore: makeNetworkStore(), cacheStore: makeCacheStore())
+        let useCase = MovieUseCase(repo: repo)
+        return useCase
+    }
+    
 }
 
 // MARK: - Stores
@@ -72,5 +87,13 @@ extension AppDependencyContainer {
     
     func makeCacheStore() -> ApiResponseCacheStoreProtocol {
         return MovieApiResponseCacheStore()
+    }
+}
+
+// MARK: - App Coordinator
+extension AppDependencyContainer {
+    func makeAppCoordinator()-> Coordinator{
+        let appCoordinator = AppCoordinator(navigationController: navigationController, appDependencyContainer: self)
+        return appCoordinator
     }
 }
