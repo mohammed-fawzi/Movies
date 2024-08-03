@@ -31,15 +31,30 @@ class AppDependencyContainer {
     }
     
     func makeMovieListViewController(repoType: MoviesListType)-> MoviesListViewController{
-        let requestBuilder = RequestBuilder()
-        let networkStore = NetworkStore(requestBuilder: requestBuilder)
-        let repo = MoviesListRepo(networkStore: networkStore,
-                                  type: repoType)
-        let useCase = MoviesListUseCase(repo: repo)
         let appCoordinator = AppCoordinator(navigationController: navigationController, appDependencyContainer: self)
-        let viewModel = MoviesListViewModel(useCase: useCase, coordinator: appCoordinator)
+        let viewModel = MoviesListViewModel(moviesListUseCase: makeMoviesListUseCase(repoType: repoType),
+                                            genresUseCase: makeGenresUseCase(),
+                                            coordinator: appCoordinator)
         let vc = MoviesListViewController()
         vc.viewModel = viewModel
         return vc
+    }
+    
+    func makeMoviesListUseCase(repoType: MoviesListType)-> MoviesListUseCaseProtocol{
+        let repo = MoviesListRepo(networkStore: makeNetworkStore(),type: repoType)
+        let useCase = MoviesListUseCase(repo: repo)
+        return useCase
+    }
+    
+    func makeGenresUseCase()-> GenresUseCaseProtocol{
+        let repo = GenresRepo(networkStore: makeNetworkStore())
+        let useCase = GenresUseCase(repo: repo)
+        return useCase
+    }
+    
+    func makeNetworkStore()-> NetworkStore{
+        let requestBuilder = RequestBuilder()
+        let networkStore = NetworkStore(requestBuilder: requestBuilder)
+        return networkStore
     }
 }

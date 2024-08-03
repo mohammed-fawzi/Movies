@@ -13,6 +13,7 @@ protocol MoviesListViewModelProtocol {
     var showFooterActivityIndicator: AnyPublisher<Bool,Never> {get}
     var showErrorAlert: AnyPublisher<String,Never> {get}
     var showEmptyState: AnyPublisher<Void,Never> {get}
+    var showGenreFilters: AnyPublisher<[Tag],Never> {get}
     
     func viewDidLoad()
     func willShowCell(atIndex index: Int)

@@ -17,7 +17,8 @@ enum ListMode {
 class MoviesListViewModel: MoviesListViewModelProtocol {
     
     // MARK: - Properties
-    private let useCase: MoviesListUseCaseProtocol
+    private let moviesListUseCase: MoviesListUseCaseProtocol
+    private let genresUseCase: GenresUseCaseProtocol
     private let coordinator: Coordinator
     private var currentPage = 1
     private var totalPages = 1
@@ -46,9 +47,16 @@ class MoviesListViewModel: MoviesListViewModelProtocol {
     var showEmptyState: AnyPublisher<Void,Never> {
         return showEmptyStateSubject.eraseToAnyPublisher()
     }
+    private var showGenreFiltersSubject = PassthroughSubject<[Tag],Never>()
+    var showGenreFilters: AnyPublisher<[Tag],Never> {
+        return showGenreFiltersSubject.eraseToAnyPublisher()
+    }
     
-    init(useCase: MoviesListUseCaseProtocol, coordinator: Coordinator) {
-        self.useCase = useCase
+    init(moviesListUseCase: MoviesListUseCaseProtocol,
+         genresUseCase: GenresUseCaseProtocol,
+         coordinator: Coordinator) {
+        self.moviesListUseCase = moviesListUseCase
+        self.genresUseCase = genresUseCase
         self.coordinator = coordinator
     }
 }
@@ -56,7 +64,7 @@ class MoviesListViewModel: MoviesListViewModelProtocol {
 // MARK: - Get Movies
 extension MoviesListViewModel {
     private func getMovies(page: Int){
-        useCase.getMovies(page: page) { [weak self] (response: Result<MoviesList, MoviesError>) in
+        moviesListUseCase.getMovies(page: page) { [weak self] (response: Result<MoviesList, MoviesError>) in
             self?.showFooterActivityIndicatorSubject.send(false)
             switch response {
             case .success(let movies):
@@ -84,10 +92,36 @@ extension MoviesListViewModel {
     }
 }
 
+// MARK: - Get Genres
+extension MoviesListViewModel {
+    private func getGenres(){
+        genresUseCase.getGenres() { [weak self] (response: Result<[Genre], MoviesError>) in
+            switch response {
+            case .success(let genres):
+                self?.handleFetchingGenresSuccess(genres: genres)
+            case .failure(let error):
+                self?.handleFetchingGenresFailure(error: error)
+            }
+        }
+    }
+    
+    private func handleFetchingGenresSuccess(genres: [Genre]){
+        let tags = genres.map { genre in
+            Tag(id: genre.id, name: genre.name)
+        }
+        showGenreFiltersSubject.send(tags)
+    }
+    
+    private func handleFetchingGenresFailure(error: MoviesError){
+        showGenreFiltersSubject.send([])
+    }
+}
+
 // MARK: - Actions
 extension MoviesListViewModel {
     func viewDidLoad(){
         getMovies(page: 1)
+        getGenres()
     }
     
     func didSelectCell(atIndex index: Int){

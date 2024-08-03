@@ -132,6 +132,12 @@ extension MoviesListViewController {
             .sink{ [weak self] _ in
                 self?.showEmptyState()
             }.store(in: &subscriptions)
+        
+        viewModel?.showGenreFilters
+            .receive(on: RunLoop.main)
+            .sink{ [weak self] tags in
+                self?.filtersView.tags = tags
+            }.store(in: &subscriptions)
     }
 }
 
