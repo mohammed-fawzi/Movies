@@ -13,13 +13,16 @@ enum MoviesListType{
 }
 
 
-class MoviesListRepo: MoviesListRepoProtocol {
+class MoviesListRepo: MoviesListRepoProtocol, Cachable {
     private let networkStore: NetworkStoreProtocol
+    var cacheStore: ApiResponseCacheStoreProtocol
     private let type: MoviesListType
 
     init(networkStore: NetworkStoreProtocol,
+         cacheStore: ApiResponseCacheStoreProtocol,
          type: MoviesListType) {
         self.networkStore = networkStore
+        self.cacheStore = cacheStore
         self.type = type
     }
     
@@ -29,16 +32,15 @@ class MoviesListRepo: MoviesListRepoProtocol {
         networkStore.sendRequest(endpoint: endPoint) { [weak self] result in
             switch result {
             case .success(let data):
-                //TODO: Save to Cache
+                self?.saveToCache(data: data, forEndPoint: endPoint)
                 self?.mapResult(data: data, resultHandler: resultHandler)
             case .failure(let error):
                 resultHandler(.failure(error))
-                //TODO: Get from cache
+                self?.getFromCache(for: endPoint, resultHandler: resultHandler)
             }
         }
     }
 }
-
 
 // MARK: - End Point
 extension MoviesListRepo {
@@ -58,8 +60,8 @@ extension MoviesListRepo {
 
 // MARK: - Mapping
 extension MoviesListRepo {
-    private func mapResult(data: Data,
-                          resultHandler: @escaping (Result<MoviesList, MoviesError>) -> Void){
+     func mapResult(data: Data,
+                    resultHandler: @escaping (Result<MoviesList, MoviesError>) -> Void){
         guard let decodedResponse = try? JSONDecoder().decode(MoviesListDTO.self, from: data) else {
             resultHandler(.failure(.decodeFailure))
             return

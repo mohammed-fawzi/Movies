@@ -7,22 +7,26 @@
 
 import Foundation
 
-class GenresRepo: GenresRepoProtocol {
+class GenresRepo: GenresRepoProtocol, Cachable {
+  
     private let networkStore: NetworkStoreProtocol
-
-    init(networkStore: NetworkStoreProtocol) {
+    var cacheStore: ApiResponseCacheStoreProtocol
+    init(networkStore: NetworkStoreProtocol,
+         cacheStore: ApiResponseCacheStoreProtocol) {
         self.networkStore = networkStore
+        self.cacheStore = cacheStore
     }
     
     func getGenres(resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void){
-        networkStore.sendRequest(endpoint: GenresEndPoint()) { [weak self] result in
+       let endPoint = GenresEndPoint()
+        networkStore.sendRequest(endpoint: endPoint) { [weak self] result in
             switch result {
             case .success(let data):
-                //TODO: Save to Cache
+                self?.saveToCache(data: data, forEndPoint: endPoint)
                 self?.mapResult(data: data, resultHandler: resultHandler)
             case .failure(let error):
                 resultHandler(.failure(error))
-                //TODO: Get from cache
+                self?.getFromCache(for: endPoint, resultHandler: resultHandler)
             }
         }
     }
@@ -30,7 +34,7 @@ class GenresRepo: GenresRepoProtocol {
 
 // MARK: - Mapping
 extension GenresRepo {
-    private func mapResult(data: Data,
+     func mapResult(data: Data,
                           resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void){
         guard let decodedResponse = try? JSONDecoder().decode(GenresDTO.self, from: data) else {
             resultHandler(.failure(.decodeFailure))

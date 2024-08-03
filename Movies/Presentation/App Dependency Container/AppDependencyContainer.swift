@@ -39,22 +39,38 @@ class AppDependencyContainer {
         vc.viewModel = viewModel
         return vc
     }
+}
+
+// MARK: - UseCases
+extension AppDependencyContainer {
     
     func makeMoviesListUseCase(repoType: MoviesListType)-> MoviesListUseCaseProtocol{
-        let repo = MoviesListRepo(networkStore: makeNetworkStore(),type: repoType)
+        let repo = MoviesListRepo(networkStore: makeNetworkStore(),
+                                  cacheStore: makeCacheStore(),
+                                  type: repoType)
         let useCase = MoviesListUseCase(repo: repo)
         return useCase
     }
     
+    
     func makeGenresUseCase()-> GenresUseCaseProtocol{
-        let repo = GenresRepo(networkStore: makeNetworkStore())
+        let repo = GenresRepo(networkStore: makeNetworkStore(),
+                              cacheStore: makeCacheStore())
         let useCase = GenresUseCase(repo: repo)
         return useCase
     }
     
+}
+
+// MARK: - Stores
+extension AppDependencyContainer {
     func makeNetworkStore()-> NetworkStore{
         let requestBuilder = RequestBuilder()
         let networkStore = NetworkStore(requestBuilder: requestBuilder)
         return networkStore
+    }
+    
+    func makeCacheStore() -> ApiResponseCacheStoreProtocol {
+        return MovieApiResponseCacheStore()
     }
 }

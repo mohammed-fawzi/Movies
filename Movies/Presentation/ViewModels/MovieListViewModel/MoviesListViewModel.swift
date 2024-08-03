@@ -94,7 +94,7 @@ extension MoviesListViewModel {
     }
     
     private func handleFetchingMoviesSuccess(moviesList: MoviesList){
-        allMovies.append(contentsOf: moviesList.movies)        
+        allMovies.append(contentsOf: moviesList.movies)
         totalPages = moviesList.totalPages
         currentPage = moviesList.page
     }
@@ -154,6 +154,7 @@ extension MoviesListViewModel {
     
     func tryAgainButtonDidTapped(){
         getMovies(page: 1)
+        getGenres()
     }
     
     func searchButtonDidTapped(withText text: String){
