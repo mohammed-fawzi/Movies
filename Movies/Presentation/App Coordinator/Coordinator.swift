@@ -20,6 +20,7 @@ protocol Coordinator {
     func popToRoot(animated: Bool)
     func popBack(count: Int, animated: Bool)
     func popToViewController<T: UIViewController>(_ targetViewControllerType: T.Type, animated: Bool)
+    func openExternalURL(url: String)
 }
 
 extension Coordinator {
