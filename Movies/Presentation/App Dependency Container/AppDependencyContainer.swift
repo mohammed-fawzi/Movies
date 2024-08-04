@@ -7,6 +7,7 @@
 
 import UIKit
 import DomainLayer
+import DataLayer
 
 class AppDependencyContainer {
     let navigationController: UINavigationController

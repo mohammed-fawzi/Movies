@@ -9,17 +9,18 @@ import Foundation
 import DomainLayer
 import Common
 
-class GenresRepo: GenresRepoProtocol, Cachable {
+ public class GenresRepo: GenresRepoProtocol, Cachable {
   
     private let networkStore: NetworkStoreProtocol
     var cacheStore: ApiResponseCacheStoreProtocol
-    init(networkStore: NetworkStoreProtocol,
-         cacheStore: ApiResponseCacheStoreProtocol) {
+    
+     public init(networkStore: NetworkStoreProtocol,
+                cacheStore: ApiResponseCacheStoreProtocol) {
         self.networkStore = networkStore
         self.cacheStore = cacheStore
     }
     
-    func getGenres(resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void){
+     public func getGenres(resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void){
        let endPoint = GenresEndPoint()
         networkStore.sendRequest(endpoint: endPoint) { [weak self] result in
             switch result {

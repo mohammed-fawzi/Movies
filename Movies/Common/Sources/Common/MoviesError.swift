@@ -21,7 +21,7 @@ public enum MoviesError: Error {
 
 // MARK: - Custom Messege
 public extension MoviesError {
-    public var customMessage: String {
+    var customMessage: String {
         switch self {
         case .noInternetConnection:
             "It seems you do not have access to the internet. We will try to fetch your saved data from the last online session"

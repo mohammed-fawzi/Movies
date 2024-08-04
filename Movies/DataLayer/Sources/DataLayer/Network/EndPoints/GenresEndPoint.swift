@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct GenresEndPoint: EndPoint{
     var host: String {
         "api.themoviedb.org"

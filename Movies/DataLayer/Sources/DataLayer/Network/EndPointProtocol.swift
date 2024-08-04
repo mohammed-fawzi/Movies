@@ -18,7 +18,7 @@ public protocol EndPoint {
     var pathParams: [String: String]? { get }  // Added for path parameters
 }
 
-extension EndPoint {
+public extension EndPoint {
     var scheme: String {"https"}
     var body: [String: String]? {nil}
     var queryParams: [String: String]? {nil}

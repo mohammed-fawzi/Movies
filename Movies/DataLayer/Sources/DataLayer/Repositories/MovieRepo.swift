@@ -9,18 +9,18 @@ import Foundation
 import DomainLayer
 import Common
 
-class MovieRepo: MovieRepoProtocol, Cachable {
+public class MovieRepo: MovieRepoProtocol, Cachable {
     private let networkStore: NetworkStoreProtocol
     let cacheStore: ApiResponseCacheStoreProtocol
     
-    init(networkStore: NetworkStoreProtocol,
-         cacheStore: ApiResponseCacheStoreProtocol) {
+    public init(networkStore: NetworkStoreProtocol,
+                cacheStore: ApiResponseCacheStoreProtocol) {
         self.networkStore = networkStore
         self.cacheStore = cacheStore
     }
     
     
-    func getMovie(withId id: Int,
+    public func getMovie(withId id: Int,
                    resultHandler: @escaping (Result<MovieDetails, MoviesError>) -> Void){
         let endPoint = MovieEndPoint.details(movieID: id)
         networkStore.sendRequest(endpoint: endPoint) { [weak self] result in

@@ -8,22 +8,22 @@
 import Foundation
 import CoreData
 
-protocol ApiResponseCacheStoreProtocol{
+public protocol ApiResponseCacheStoreProtocol{
     func getResponse(forEndPoint endPoint: EndPoint) -> Data?
     func insertResponse(withData data: Data, forEndPoint endPoint: EndPoint)
 }
 
-class MovieApiResponseCacheStore: ApiResponseCacheStoreProtocol{
+ public class MovieApiResponseCacheStore: ApiResponseCacheStoreProtocol{
     private let coreDataStore = CoreDataStore<CDApiResponse>()
     private let requestBuilder = RequestBuilder()
-    
-    func getResponse(forEndPoint endPoint: EndPoint) -> Data? {
+    public init(){}
+     public func getResponse(forEndPoint endPoint: EndPoint) -> Data? {
         guard let urlRequest = requestBuilder.createRequest(endPoint: endPoint),
               let urlString = urlRequest.url?.absoluteString else {return nil}
         return getResponse(WithId: urlString)
     }
     
-    func insertResponse(withData data: Data, forEndPoint endPoint: EndPoint) {
+     public func insertResponse(withData data: Data, forEndPoint endPoint: EndPoint) {
         guard let urlRequest = requestBuilder.createRequest(endPoint: endPoint),
               let urlString = urlRequest.url?.absoluteString else {return}
         insertResponse(withData: data, andID: urlString)

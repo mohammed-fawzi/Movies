@@ -7,12 +7,13 @@
 
 import Foundation
 
-protocol RequestBuilderProtocol{
+public protocol RequestBuilderProtocol{
     func createRequest(endPoint: EndPoint) -> URLRequest?
 }
 
-struct RequestBuilder: RequestBuilderProtocol{
-     func createRequest(endPoint: EndPoint) -> URLRequest? {
+ public struct RequestBuilder: RequestBuilderProtocol{
+     public init(){}
+    public func createRequest(endPoint: EndPoint) -> URLRequest? {
         let urlComponents = createUrlComponents(endPoint: endPoint)
         guard let url = urlComponents.url else {return nil}
         var request = URLRequest(url: url)

@@ -10,17 +10,17 @@ import Combine
 import DomainLayer
 import Common
 
-enum MoviesListType{
+public enum MoviesListType{
     case trending, nowPlaying, upcoming
 }
 
 
-class MoviesListRepo: MoviesListRepoProtocol, Cachable {
+public class MoviesListRepo: MoviesListRepoProtocol, Cachable {
     private let networkStore: NetworkStoreProtocol
     var cacheStore: ApiResponseCacheStoreProtocol
     private let type: MoviesListType
 
-    init(networkStore: NetworkStoreProtocol,
+    public init(networkStore: NetworkStoreProtocol,
          cacheStore: ApiResponseCacheStoreProtocol,
          type: MoviesListType) {
         self.networkStore = networkStore
@@ -28,7 +28,7 @@ class MoviesListRepo: MoviesListRepoProtocol, Cachable {
         self.type = type
     }
     
-    func getMovies(page: Int,
+    public func getMovies(page: Int,
                    resultHandler: @escaping (Result<MoviesList, MoviesError>) -> Void){
         let endPoint = getEndPoint(withPage: page)
         networkStore.sendRequest(endpoint: endPoint) { [weak self] result in

@@ -8,25 +8,25 @@
 import Foundation
 import Common
 
-protocol NetworkStoreProtocol {
+public protocol NetworkStoreProtocol {
     func sendRequest(endpoint: EndPoint,
                      resultHandler: @escaping (Result<Data, MoviesError>) -> Void)
     func sendRequest<T: Decodable>(endpoint: EndPoint,
                                    resultHandler: @escaping (Result<T, MoviesError>) -> Void)
 }
 
-public final class NetworkStore: NetworkStoreProtocol {
+ public final class NetworkStore: NetworkStoreProtocol {
     private var requestBuilder: RequestBuilderProtocol
     private var errorMapper = ErrorMapper()
     
-    init(requestBuilder: RequestBuilderProtocol = RequestBuilder()) {
+    public init(requestBuilder: RequestBuilderProtocol = RequestBuilder()) {
         self.requestBuilder = requestBuilder
     }
 }
 
 // MARK: - Using Completion Handler
-extension NetworkStore {
-    public func sendRequest<T: Decodable>(endpoint: EndPoint,
+public extension NetworkStore {
+     func sendRequest<T: Decodable>(endpoint: EndPoint,
                                           resultHandler: @escaping (Result<T, MoviesError>) -> Void) {
         
         sendRequest(endpoint: endpoint) { result in
@@ -43,7 +43,7 @@ extension NetworkStore {
         }
     }
     
-    public func sendRequest(endpoint: EndPoint,
+    func sendRequest(endpoint: EndPoint,
                             resultHandler: @escaping (Result<Data, MoviesError>) -> Void) {
         
         guard let urlRequest = requestBuilder.createRequest(endPoint: endpoint) else {
