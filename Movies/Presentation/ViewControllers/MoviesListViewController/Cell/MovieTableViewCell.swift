@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import DomainLayer
 
 class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var posterImageView: UIImageView!

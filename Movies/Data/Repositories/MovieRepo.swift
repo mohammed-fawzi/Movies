@@ -6,7 +6,8 @@
 //
 
 import Foundation
-
+import DomainLayer
+import Common
 
 class MovieRepo: MovieRepoProtocol, Cachable {
     private let networkStore: NetworkStoreProtocol

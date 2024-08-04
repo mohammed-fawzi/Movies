@@ -7,6 +7,8 @@
 
 import Foundation
 import Combine
+import DomainLayer
+import Common
 
 class MovieDetailsViewModel {
     // MARK: - Properties

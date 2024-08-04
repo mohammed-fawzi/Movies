@@ -6,20 +6,21 @@
 //
 
 import Foundation
+import Common
 
-protocol MoviesListUseCaseProtocol {
+public protocol MoviesListUseCaseProtocol {
     func getMovies(page: Int,
                    resultHandler: @escaping (Result<MoviesList, MoviesError>) -> Void)
 }
 
-class MoviesListUseCase: MoviesListUseCaseProtocol {
+public class MoviesListUseCase: MoviesListUseCaseProtocol {
     private let repo: MoviesListRepoProtocol
     
-    init(repo: MoviesListRepoProtocol) {
+    public init(repo: MoviesListRepoProtocol) {
         self.repo = repo
     }
     
-    func getMovies(page: Int,
+    public func getMovies(page: Int,
                    resultHandler: @escaping (Result<MoviesList, MoviesError>) -> Void){
         repo.getMovies(page: page, resultHandler: resultHandler)
     }

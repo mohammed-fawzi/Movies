@@ -6,22 +6,22 @@
 //
 
 import Foundation
+import Common
 
-
-protocol MovieUseCaseProtocol {
+public protocol MovieUseCaseProtocol {
     func getMovie(withId: Int,
                   resultHandler: @escaping (Result<MovieDetails, MoviesError>) -> Void)
 }
 
-class MovieUseCase: MovieUseCaseProtocol {
+public class MovieUseCase: MovieUseCaseProtocol {
     private let repo: MovieRepoProtocol
     
-    init(repo: MovieRepoProtocol) {
+    public init(repo: MovieRepoProtocol) {
         self.repo = repo
     }
     
-    func getMovie(withId id: Int,
-                   resultHandler: @escaping (Result<MovieDetails, MoviesError>) -> Void){
+    public func getMovie(withId id: Int,
+                         resultHandler: @escaping (Result<MovieDetails, MoviesError>) -> Void){
         repo.getMovie(withId: id, resultHandler: resultHandler)
     }
 }

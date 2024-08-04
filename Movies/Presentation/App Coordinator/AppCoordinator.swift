@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import DomainLayer
 
 enum Module{
     case trendingMovies

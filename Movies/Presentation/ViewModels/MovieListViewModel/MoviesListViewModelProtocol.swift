@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import DomainLayer
 
 protocol MoviesListViewModelProtocol {
     var reloadTable: AnyPublisher<Void,Never> {get}

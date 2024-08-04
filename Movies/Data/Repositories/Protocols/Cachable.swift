@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 
 protocol Cachable {
     associatedtype entity

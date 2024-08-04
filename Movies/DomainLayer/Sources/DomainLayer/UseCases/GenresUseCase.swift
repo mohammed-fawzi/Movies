@@ -6,19 +6,20 @@
 //
 
 import Foundation
+import Common
 
-protocol GenresUseCaseProtocol {
+public protocol GenresUseCaseProtocol {
     func getGenres(resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void)
 }
 
-class GenresUseCase: GenresUseCaseProtocol {
+public class GenresUseCase: GenresUseCaseProtocol {
     private let repo: GenresRepoProtocol
     
-    init(repo: GenresRepoProtocol) {
+    public init(repo: GenresRepoProtocol) {
         self.repo = repo
     }
     
-    func getGenres(resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void){
+    public func getGenres(resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void){
         repo.getGenres(resultHandler: resultHandler)
     }
 }

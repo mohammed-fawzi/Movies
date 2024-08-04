@@ -6,7 +6,8 @@
 //
 
 import Foundation
+import Common
 
-protocol GenresRepoProtocol {
+public protocol GenresRepoProtocol {
     func getGenres(resultHandler: @escaping (Result<[Genre], MoviesError>) -> Void)
 }

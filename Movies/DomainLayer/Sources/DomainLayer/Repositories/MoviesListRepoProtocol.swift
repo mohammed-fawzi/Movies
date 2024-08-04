@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Common
 
-protocol MoviesListRepoProtocol {
+public protocol MoviesListRepoProtocol {
     func getMovies(page: Int,
                    resultHandler: @escaping (Result<MoviesList, MoviesError>) -> Void)
 }

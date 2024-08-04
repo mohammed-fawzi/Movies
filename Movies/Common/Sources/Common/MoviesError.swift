@@ -20,7 +20,7 @@ public enum MoviesError: Error {
 }
 
 // MARK: - Custom Messege
-extension MoviesError {
+public extension MoviesError {
     public var customMessage: String {
         switch self {
         case .noInternetConnection:

@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import DomainLayer
+import Common
 
 class GenresRepo: GenresRepoProtocol, Cachable {
   

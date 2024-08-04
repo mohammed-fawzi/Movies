@@ -7,6 +7,8 @@
 
 import Foundation
 import Combine
+import DomainLayer
+import Common
 
 enum MoviesListType{
     case trending, nowPlaying, upcoming
