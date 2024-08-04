@@ -9,12 +9,12 @@ import UIKit
 import DomainLayer
 import DataLayer
 
-class AppDependencyContainer {
+public class AppDependencyContainer {
     let navigationController: UINavigationController
-    init(navigationController: UINavigationController) {
+    public init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-    func makeMoviesTabViewController()-> MoviesTabBarViewController{
+    public func makeMoviesTabViewController()-> MoviesTabBarViewController{
         let tabBarController = MoviesTabBarViewController()
         tabBarController.appDependencyContainer = self
         return tabBarController

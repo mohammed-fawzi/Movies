@@ -11,8 +11,7 @@ extension UIView {
     
     ///Load the xib with same name of caller
     func loadFromNib() -> UIView? {
-        let bundle = Bundle(for: type(of: self))
-        let nib = UINib(nibName: String(describing: type(of: self)), bundle: bundle)
+        let nib = UINib(nibName: String(describing: type(of: self)), bundle: Bundle.module)
         let nibView = nib.instantiate(withOwner: self, options: nil).first as? UIView
         return nibView
     }

@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MovieDetailsViewController" customModule="Movies" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MovieDetailsViewController" customModule="PresentationLayer">
             <connections>
                 <outlet property="genresLabel" destination="PTr-08-Rgp" id="DED-AH-fp8"/>
                 <outlet property="overviewTextView" destination="2EV-OX-5OB" id="7v1-uj-wnd"/>
@@ -58,7 +58,7 @@
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zrq-f0-BrL" customClass="TagsCollectionView" customModule="Movies" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zrq-f0-BrL" customClass="TagsCollectionView" customModule="PresentationLayer">
                             <rect key="frame" x="10" y="301.66666666666663" width="353" height="50"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>

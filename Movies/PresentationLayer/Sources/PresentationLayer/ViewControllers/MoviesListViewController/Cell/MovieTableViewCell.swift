@@ -44,6 +44,6 @@ class MovieTableViewCell: UITableViewCell {
 
 extension MovieTableViewCell {
     private func showImage(image: UIImage?) {
-        posterImageView.image = image ?? .posterPlaceholderSm
+        posterImageView.image = image ?? UIImage(named: "poster-placeholder-sm",in: .module, with: nil)
         }
 }

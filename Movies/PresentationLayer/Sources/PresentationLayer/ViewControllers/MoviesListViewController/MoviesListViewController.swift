@@ -22,6 +22,14 @@ class MoviesListViewController: UIViewController {
     var viewModel: MoviesListViewModelProtocol?
     private var subscriptions = Set<AnyCancellable>()
     
+    public init() {
+            super.init(nibName: String(describing: type(of: self)), bundle: Bundle.module)
+        }
+    
+    required init?(coder: NSCoder) {
+           super.init(coder: coder)
+       }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +61,7 @@ extension MoviesListViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = footerSpinner
-        let nib = UINib(nibName: cellID, bundle: .main)
+        let nib = UINib(nibName: cellID, bundle: .module)
         tableView.register( nib , forCellReuseIdentifier: cellID)
     }
     
@@ -74,7 +82,7 @@ extension MoviesListViewController {
     
     private func setupSearchBar(){
         searchBar.delegate = self
-        searchBar.searchTextField.textColor = .textPrimary
+        searchBar.searchTextField.textColor = UIColor(named: "TextPrimaryColor") //.textPrimary
     }
     
     private func setupFiltersView(){

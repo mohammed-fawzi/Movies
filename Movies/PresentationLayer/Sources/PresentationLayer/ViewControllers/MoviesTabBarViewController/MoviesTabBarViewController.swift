@@ -7,14 +7,14 @@
 
 import UIKit
 
-class MoviesTabBarViewController: UITabBarController {
+public class MoviesTabBarViewController: UITabBarController {
     var appDependencyContainer: AppDependencyContainer!{
         didSet{
             setupViewControllers()
         }
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
     }
     

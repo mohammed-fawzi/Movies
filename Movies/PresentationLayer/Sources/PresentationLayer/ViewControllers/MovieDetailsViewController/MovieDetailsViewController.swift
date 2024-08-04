@@ -21,8 +21,17 @@ class MovieDetailsViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     private var imageLoader: ImageLoaderProtocol = ImageLoader.shared
     
+    public init() {
+            super.init(nibName: String(describing: type(of: self)), bundle: Bundle.module)
+        }
+    
+    required init?(coder: NSCoder) {
+           super.init(coder: coder)
+       }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        tagsView.allowTagSelection = false
         bind()
         viewModel?.viewDidLoad()
     }
@@ -71,7 +80,7 @@ extension MovieDetailsViewController {
             .sink { [weak self] tags in
             self?.tagsView.tags = tags.map({ (name, icon, iconColor) in
                 let icon = icon != nil ? UIImage(systemName: icon!) : nil
-                let color = iconColor != nil ? UIColor(named: iconColor!) : nil
+                let color = iconColor != nil ? UIColor(named: iconColor!,in: .module,compatibleWith: nil) : nil
                 return Tag(id: 0, name: name, icon: icon, iconColor: color)
             })
         }.store(in: &subscriptions)

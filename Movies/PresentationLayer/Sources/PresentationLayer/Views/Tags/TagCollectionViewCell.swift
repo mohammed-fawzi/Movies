@@ -9,11 +9,11 @@ import UIKit
 
 struct TagCellConstants {
     static var unselectedBackgroundColor: UIColor = .cardSecondry
-    static var selectedBackgroundColor: UIColor = .accessory
+    static var selectedBackgroundColor: UIColor =  .accessory
     static var iconSize: CGSize = CGSize(width: 20, height: 20)
     static var stackSpacing: CGFloat = 5
     static var nameLabelFont: UIFont = .systemFont(ofSize: 14, weight: .semibold)
-    static var unselectedNameLabelColor: UIColor = .textSecondry
+    static var unselectedNameLabelColor: UIColor =  .textSecondry
     static var selectedNameLabelColor: UIColor = .black
     static var tagHeight: CGFloat = 30
     static var tagPadding = UIEdgeInsets(top: 2, left: 10, bottom: 2, right: 10)
