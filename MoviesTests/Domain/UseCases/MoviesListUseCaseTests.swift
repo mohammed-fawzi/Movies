@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Movies
+@testable import DomainLayer
 
 final class MoviesListUseCaseTests: XCTestCase {
     var sut: MoviesListUseCase!

@@ -7,6 +7,8 @@
 
 import XCTest
 @testable import Movies
+@testable import PresentationLayer
+@testable import Common
 
 final class MovieDetailstViewModelTests: XCTestCase {
     var sut: MovieDetailsViewModel!

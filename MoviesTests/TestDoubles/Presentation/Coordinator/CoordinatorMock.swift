@@ -6,6 +6,7 @@
 //
 
 import UIKit
+@testable import PresentationLayer
 @testable import Movies
 
 class CoordinatorMock: Coordinator {

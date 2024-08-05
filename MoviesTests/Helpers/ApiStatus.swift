@@ -7,7 +7,7 @@
 
 import Foundation
 @testable import Movies
-
+@testable import Common
 enum ApiStatus {
     case success
     case failure(error: MoviesError)

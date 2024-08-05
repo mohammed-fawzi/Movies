@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import Movies
+@testable import DomainLayer
 
 struct MovieDetailsStub {
     static let movie1Details = MovieDetails(genres: ["adventure, scifi, action"],

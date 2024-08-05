@@ -7,6 +7,8 @@
 
 import Foundation
 @testable import Movies
+@testable import DataLayer
+@testable import Common
 
 class NetworkStoreMock: NetworkStoreProtocol {
     // MARK: - Config

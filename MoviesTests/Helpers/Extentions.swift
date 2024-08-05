@@ -7,6 +7,8 @@
 
 import Foundation
 @testable import Movies
+@testable import DomainLayer
+@testable import PresentationLayer
 
 // MARK: - Helpers
 extension Movie: Equatable {

@@ -7,6 +7,9 @@
 
 import XCTest
 @testable import Movies
+@testable import DataLayer
+@testable import DomainLayer
+@testable import Common
 
 final class MovieRepoTests: XCTestCase {
     

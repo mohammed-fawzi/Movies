@@ -7,6 +7,9 @@
 
 import XCTest
 import Combine
+@testable import PresentationLayer
+@testable import DomainLayer
+@testable import Common
 @testable import Movies
 
 final class MoviesListViewModelTests: XCTestCase {

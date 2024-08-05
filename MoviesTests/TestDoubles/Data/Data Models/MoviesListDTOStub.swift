@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import Movies
+@testable import DataLayer
 
 struct MoviesListDTOStub{
     static let rawData = StubsHandler.getDataFromFile(fileName: "MoviesListResponse.json")

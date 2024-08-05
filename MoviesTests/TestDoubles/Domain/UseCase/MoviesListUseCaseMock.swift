@@ -7,7 +7,8 @@
 
 import Foundation
 @testable import Movies
-
+@testable import DomainLayer
+@testable import Common
 class MoviesListUseCaseMock: MoviesListUseCaseProtocol {
     // MARK: - Config
     var status: ApiStatus = .success

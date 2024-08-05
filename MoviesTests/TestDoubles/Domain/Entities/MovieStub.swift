@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import Movies
+@testable import DomainLayer
 
 struct MovieStub {
     
