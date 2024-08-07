@@ -31,9 +31,13 @@ class CoreDataStack {
     }
     
     func saveContext() {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-           try? context.save()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            let context = persistentContainer.viewContext
+            if context.hasChanges {
+               try? context.save()
+            }
         }
+       
     }
 }
