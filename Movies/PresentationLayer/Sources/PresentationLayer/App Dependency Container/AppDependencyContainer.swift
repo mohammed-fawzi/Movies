@@ -6,49 +6,33 @@
 //
 
 import UIKit
+import SwiftUI
 import DomainLayer
 import DataLayer
 
 public class AppDependencyContainer {
-    let navigationController: UINavigationController
-    public init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
-    }
-    public func makeMoviesTabViewController()-> MoviesTabBarViewController{
-        let tabBarController = MoviesTabBarViewController()
-        tabBarController.appDependencyContainer = self
-        return tabBarController
+    
+    
+    public init(){}
+    
+    public func makeTabsView()-> MoviesTabsView{
+        MoviesTabsView(dependencyContainer: self)
     }
     
-    func makeTrendingMoviesListViewController() -> MoviesListViewController {
-        makeMovieListViewController(repoType: .trending)
-    }
+    func makeListView(ofType type: MoviesListType, title: String = "")-> MoviesListView{
+        let viewModel = MoviesListViewModel(moviesListUseCase: makeMoviesListUseCase(repoType: type),
+                                            genresUseCase: makeGenresUseCase())
+        let listView = MoviesListView(title: title,
+                                      viewModel: viewModel,
+                                      makeDetailsView: makeMovieDetailsView(movie:))
+        return listView
+     }
     
-    func makeUpcomingMoviesListViewController() -> MoviesListViewController {
-        makeMovieListViewController(repoType: .upcoming)
-    }
-    
-    func makeNowPlayingMoviesListViewController() -> MoviesListViewController {
-        makeMovieListViewController(repoType: .nowPlaying)
-    }
-    
-    func makeMovieListViewController(repoType: MoviesListType)-> MoviesListViewController{
-        
-        let viewModel = MoviesListViewModel(moviesListUseCase: makeMoviesListUseCase(repoType: repoType),
-                                            genresUseCase: makeGenresUseCase(),
-                                            coordinator: makeAppCoordinator())
-        let vc = MoviesListViewController()
-        vc.viewModel = viewModel
-        return vc
-    }
-    
-    func makeMovieDetailsViewController(movie: Movie)-> MovieDetailsViewController{
+    func makeMovieDetailsView(movie: Movie)-> MovieDetailsView{
         let viewModel = MovieDetailsViewModel(useCase: makeMovieDetailsUseCase(),
-                                              movie: movie,
-                                              coordinator: makeAppCoordinator() )
-        let vc = MovieDetailsViewController()
-        vc.viewModel = viewModel
-        return vc
+                                              movie: movie)
+        let view = MovieDetailsView(viewModel: viewModel)
+        return view
     }
 }
 
@@ -89,13 +73,5 @@ extension AppDependencyContainer {
     
     func makeCacheStore() -> ApiResponseCacheStoreProtocol {
         return MovieApiResponseCacheStore()
-    }
-}
-
-// MARK: - App Coordinator
-extension AppDependencyContainer {
-    func makeAppCoordinator()-> Coordinator{
-        let appCoordinator = AppCoordinator(navigationController: navigationController, appDependencyContainer: self)
-        return appCoordinator
     }
 }

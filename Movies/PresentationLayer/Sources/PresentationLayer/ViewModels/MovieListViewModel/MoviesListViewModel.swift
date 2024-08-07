@@ -15,12 +15,11 @@ enum ListMode {
     case search
 }
 
-class MoviesListViewModel: MoviesListViewModelProtocol {
+class MoviesListViewModel: ObservableObject {
     
     // MARK: - Properties
     private let moviesListUseCase: MoviesListUseCaseProtocol
     private let genresUseCase: GenresUseCaseProtocol
-    private let coordinator: Coordinator
     private var currentPage = 1
     private var totalPages = 1
     private var mode: ListMode = .normal
@@ -32,69 +31,58 @@ class MoviesListViewModel: MoviesListViewModelProtocol {
         didSet {updateDisplayedList()}
     }
     // movies filterd from search
-    private var searchResults: [Movie] = [] {
-        didSet {reloadSubject.send(())}
-    }
+    @Published private(set) var searchResults: [Movie] = []
     // final list to be displayed for user
-    private var displayMovies: [Movie] = [] {
-        didSet {reloadSubject.send(())}
-    }
-    
-    private func updateDisplayedList(){
-        if let filterId = selectedFilter {
-            displayMovies = allMovies.filter{
-                return $0.genres?.contains(filterId) ?? false
-            }
-        }else {
-            displayMovies = allMovies
-        }
-    }
+    @Published private(set) var displayMovies: [Movie] = []
+    @Published private(set) var genreFilters: [Tag] = []
+    @Published private(set) var showFooterActivityIndicator: Bool = false
+    @Published private(set) var showEmptyState: Bool = false
+    @Published var showErrorAlert: Bool = false
+
+    var errorMessage: String = ""
+
     // MARK: - Subjects
     private var reloadSubject = PassthroughSubject<Void,Never>()
     var reloadTable: AnyPublisher<Void,Never>{
         return reloadSubject.eraseToAnyPublisher()
     }
-    private var showFooterActivityIndicatorSubject = PassthroughSubject<Bool,Never>()
-    var showFooterActivityIndicator: AnyPublisher<Bool,Never> {
-        return showFooterActivityIndicatorSubject.eraseToAnyPublisher()
-    }
-    private var showErrorAlertSubject = PassthroughSubject<String,Never>()
-    var showErrorAlert: AnyPublisher<String,Never> {
-        return showErrorAlertSubject.eraseToAnyPublisher()
-    }
-    private var showEmptyStateSubject = PassthroughSubject<Void,Never>()
-    var showEmptyState: AnyPublisher<Void,Never> {
-        return showEmptyStateSubject.eraseToAnyPublisher()
-    }
-    private var showGenreFiltersSubject = PassthroughSubject<[Tag],Never>()
-    var showGenreFilters: AnyPublisher<[Tag],Never> {
-        return showGenreFiltersSubject.eraseToAnyPublisher()
-    }
-    
+
     init(moviesListUseCase: MoviesListUseCaseProtocol,
-         genresUseCase: GenresUseCaseProtocol,
-         coordinator: Coordinator) {
+         genresUseCase: GenresUseCaseProtocol) {
         self.moviesListUseCase = moviesListUseCase
         self.genresUseCase = genresUseCase
-        self.coordinator = coordinator
+        getData()
     }
+    
+    private func updateDisplayedList(){
+       if let filterId = selectedFilter {
+           displayMovies = allMovies.filter{
+               return $0.genres?.contains(filterId) ?? false
+           }
+       }else {
+           displayMovies = allMovies
+       }
+   }
 }
 
 // MARK: - Get Movies
 extension MoviesListViewModel {
     private func getMovies(page: Int){
         moviesListUseCase.getMovies(page: page) { [weak self] (response: Result<MoviesList, MoviesError>) in
-            self?.showFooterActivityIndicatorSubject.send(false)
-            switch response {
-            case .success(let movies):
-                self?.handleFetchingMoviesSuccess(moviesList: movies)
-            case .failure(let error):
-                self?.handleFetchingMoviesFailure(error: error)
+            DispatchQueue.main.async{
+                self?.showFooterActivityIndicator = false
+                switch response {
+                case .success(let movies):
+                    self?.handleFetchingMoviesSuccess(moviesList: movies)
+                case .failure(let error):
+                    self?.handleFetchingMoviesFailure(error: error)
+                }
             }
         }
     }
     
     private func handleFetchingMoviesSuccess(moviesList: MoviesList){
+        showEmptyState = false
         allMovies.append(contentsOf: moviesList.movies)
         totalPages = moviesList.totalPages
         currentPage = moviesList.page
@@ -104,9 +92,10 @@ extension MoviesListViewModel {
         switch error {
         case .noCacheFound:
             guard displayMovies.isEmpty else {return}
-            showEmptyStateSubject.send(())
+            showEmptyState = true
         default:
-            showErrorAlertSubject.send(error.customMessage)
+            errorMessage = error.customMessage
+            showErrorAlert = true
         }
     }
 }
@@ -115,12 +104,15 @@ extension MoviesListViewModel {
 extension MoviesListViewModel {
     private func getGenres(){
         genresUseCase.getGenres() { [weak self] (response: Result<[Genre], MoviesError>) in
-            switch response {
-            case .success(let genres):
-                self?.handleFetchingGenresSuccess(genres: genres)
-            case .failure(let error):
-                self?.handleFetchingGenresFailure(error: error)
+            DispatchQueue.main.async {
+                switch response {
+                case .success(let genres):
+                    self?.handleFetchingGenresSuccess(genres: genres)
+                case .failure(let error):
+                    self?.handleFetchingGenresFailure(error: error)
+                }
             }
+          
         }
     }
     
@@ -128,29 +120,24 @@ extension MoviesListViewModel {
         let tags = genres.map { genre in
             Tag(id: genre.id, name: genre.name)
         }
-        showGenreFiltersSubject.send(tags)
+        genreFilters = tags
     }
     
     private func handleFetchingGenresFailure(error: MoviesError){
-        showGenreFiltersSubject.send([])
+        genreFilters = []
     }
 }
 
 // MARK: - Actions
 extension MoviesListViewModel {
-    func viewDidLoad(){
+    private func getData(){
         getMovies(page: 1)
         getGenres()
     }
     
-    func didSelectCell(atIndex index: Int){
-        let movie = getMovie(atIndex: index)
-        coordinator.navigate(to: .movieDetails(movie: movie), withNavigationAction: .push)
-    }
-    
-    func willShowCell(atIndex index: Int){
+    func didShowRow(atIndex index: Int){
         guard index == displayMovies.count - 1 && currentPage < totalPages else {return}
-        showFooterActivityIndicatorSubject.send(true)
+        showFooterActivityIndicator = true
         getMovies(page: currentPage + 1)
     }
     
@@ -176,12 +163,8 @@ extension MoviesListViewModel {
         getMovies(page: 1)
     }
     
-    func didSelectTag(withId id: Int){
-        selectedFilter = id
-    }
-    
-    func didDeselectTag(withId id: Int){
-        selectedFilter = nil
+    func didTapFilter(_ id: Int,_ isSelected: Bool){
+        selectedFilter = isSelected ? id : nil
     }
 }
 

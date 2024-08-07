@@ -10,57 +10,54 @@ import Combine
 import DomainLayer
 import Common
 
-class MovieDetailsViewModel {
+class MovieDetailsViewModel: ObservableObject {
     // MARK: - Properties
     private let movie: Movie
     private var movieDetails: MovieDetails?
     private let useCase: MovieUseCaseProtocol
-    private let coordinator: Coordinator
     // MARK: - Subjects
     @Published private(set) var poster = ""
     @Published private(set) var title = ""
     @Published private(set) var overview = ""
     @Published private(set) var genres = ""
     @Published private(set) var tags = [(name:String, icon: String?,iconColor: String?)]()
+    @Published var showErrorAlert: Bool = false
     @Published private(set) var errorMessage = ""
-
-    init(useCase: MovieUseCaseProtocol, movie: Movie, coordinator: Coordinator) {
+    var destinationUrl: URL?
+    
+    init(useCase: MovieUseCaseProtocol, movie: Movie) {
         self.movie = movie
         self.useCase = useCase
-        self.coordinator = coordinator
         setIntialMovieDetails()
+        GetDetails()
     }
 }
 
 // MARK: - Fetching Extra Movie details
 extension MovieDetailsViewModel {
-    func viewDidLoad(){
+    private func GetDetails(){
         useCase.getMovie(withId: movie.id) { [weak self] result in
-            switch result {
-            case .success(let movieDetails):
-                self?.handleFetchingMovieDetailsSuccess(movieDetails: movieDetails)
-            case .failure(let error):
-                self?.handleFetchingMovieDetialsFailure(error: error)
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let movieDetails):
+                    self?.handleFetchingMovieDetailsSuccess(movieDetails: movieDetails)
+                case .failure(let error):
+                    self?.handleFetchingMovieDetialsFailure(error: error)
+                }
             }
         }
     }
     
     private func handleFetchingMovieDetailsSuccess(movieDetails: MovieDetails){
         self.movieDetails = movieDetails
+        self.destinationUrl = URL(string: movieDetails.homePageUrl ?? "")
         setGenres()
         setTags()
     }
     
     private func handleFetchingMovieDetialsFailure(error: MoviesError){
         errorMessage = error.customMessage
-    }
-}
-
-// MARK: - Actions
-extension MovieDetailsViewModel {
-    func homePageButtonDidTapped(){
-        guard let url = movieDetails?.homePageUrl else {return}
-        coordinator.openExternalURL(url: url)
+        showErrorAlert = true
     }
 }
 

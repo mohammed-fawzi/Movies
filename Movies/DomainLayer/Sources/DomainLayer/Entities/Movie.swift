@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Movie {
+public struct Movie: Identifiable {
     public var id: Int
     public var title: String?
     public var overview: String?
