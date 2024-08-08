@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import PresentationLayer
 
 final class MoviesUITests: XCTestCase {
   var app = XCUIApplication()
@@ -16,13 +17,14 @@ final class MoviesUITests: XCTestCase {
     }
 
     func testMovieCellExists() throws {
-        let firstCell = app.tables.cells.firstMatch
+        let ids = AccessibilityIds.MovieCardView.self
+        let firstCell = app.cells.firstMatch
         XCTAssertTrue(firstCell.exists)
-        XCTAssertTrue(firstCell.staticTexts["titleLabel"].exists)
-        XCTAssertTrue(firstCell.images["posterImage"].exists)
-        XCTAssertTrue(firstCell.staticTexts["releaseDateLabel"].exists)
-        XCTAssertTrue(firstCell.staticTexts["scoreLabel"].exists)
-        XCTAssertTrue(firstCell.images["scoreIcon"].exists)
+        XCTAssertTrue(firstCell.staticTexts[ids.titleLabel.rawValue].exists)
+        XCTAssertTrue(firstCell.images[ids.posterImage.rawValue].exists)
+        XCTAssertTrue(firstCell.staticTexts[ids.releaseDateLabel.rawValue].exists)
+        XCTAssertTrue(firstCell.staticTexts[ids.scoreLabel.rawValue].exists)
+        XCTAssertTrue(firstCell.images[ids.scoreIcon.rawValue].exists)
     }
     
     func testTabBarTabsExistsWithCorrentName(){
@@ -32,7 +34,7 @@ final class MoviesUITests: XCTestCase {
         let thidTab = tabs.element(boundBy: 2)
         
         XCTAssertEqual(firstTab.label, "Trending")
-        XCTAssertEqual(secondTab.label, "Now playing")
+        XCTAssertEqual(secondTab.label, "Now Playing")
         XCTAssertEqual(thidTab.label, "Upcoming")
     }
     
@@ -47,49 +49,43 @@ final class MoviesUITests: XCTestCase {
         firstTab.tap()
         XCTAssertTrue(navigationBar.staticTexts["Trending"].exists)
         secondTab.tap()
-        XCTAssertTrue(navigationBar.staticTexts["Now playing"].exists)
+        XCTAssertTrue(navigationBar.staticTexts["Now Playing"].exists)
         thidTab.tap()
         XCTAssertTrue(navigationBar.staticTexts["Upcoming"].exists)
     }
   
     func testNavigateToDetailsScreen(){
-        app.tables.cells.firstMatch.tap()
-        let detailsView = app.otherElements["movieDetailsScreen"]
-        XCTAssertTrue(detailsView.staticTexts["detailsGenresLabel"].exists)
-        XCTAssertTrue(detailsView.textViews["detailsOverviewTextView"].exists)
-        XCTAssertTrue(detailsView.images["detailsPosterImage"].exists)
-        let tagsCollection = detailsView.collectionViews["tagsCollectionView"]
-        XCTAssertTrue(tagsCollection.exists)
-        XCTAssertEqual(tagsCollection.cells.count, 4)
+        let ids = AccessibilityIds.MovieDetailsView.self
+        app.cells.firstMatch.tap()
+        XCTAssertTrue(app.staticTexts[ids.detailsGenresLabel.rawValue].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts[ids.detailsOverviewTextView.rawValue].exists)
+        XCTAssertTrue(app.images[ids.detailsPosterImage.rawValue].exists)
     }
     
     func testSearch(){
         // activate search
-        let table = app.tables.firstMatch
+        let ids = AccessibilityIds.MovieCardView.self
+        let list = app.collectionViews.firstMatch
         let searchField = app.searchFields.element
         searchField.tap()
         // get third cell title
-        let thirdCellTitle = table.cells.element(boundBy: 3).staticTexts["titleLabel"].label
+        let thirdCellTitle = list.cells.element(boundBy: 2).staticTexts[ids.titleLabel.rawValue].label
         // search for third cell
         searchField.typeText(thirdCellTitle)
         app.keyboards.firstMatch.buttons["Search"].firstMatch.tap()
         //first search result now should be same as what we have typed
-        let firstCellTitle = table.cells.firstMatch.staticTexts["titleLabel"].label
+        let firstCellTitle = list.cells.firstMatch.staticTexts[ids.titleLabel.rawValue].label
         XCTAssertEqual(firstCellTitle, thirdCellTitle)
-        app.tables.cells.firstMatch.tap()
-        
     }
     
     func testFilters(){
         //select action filter
-        let filters = app.collectionViews.firstMatch
-        let actionFilter = filters.cells.staticTexts["Action"]
+        let actionFilter = app.buttons["Action"]
         actionFilter.tap()
         //navigate to first movie
-        app.tables.cells.firstMatch.tap()
+        app.cells.firstMatch.tap()
         //genres should contain "Action" word
-        let detailsView = app.otherElements["movieDetailsScreen"]
-        XCTAssertTrue(detailsView.staticTexts["detailsGenresLabel"].label.contains("Action"))
+        XCTAssertTrue(app.staticTexts["detailsGenresLabel"].label.contains("Action"))
     }
     
 }

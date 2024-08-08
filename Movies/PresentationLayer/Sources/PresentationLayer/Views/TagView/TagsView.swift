@@ -66,6 +66,7 @@ struct TagsView: View {
                     .font(.subheadline)
                     .bold()
                     .foregroundStyle(isHighlited ? Constants.selectedNameLabelColor : Constants.unselectedNameLabelColor)
+                    .accessibilityIdentifier(tag.name)
             }
             
         }

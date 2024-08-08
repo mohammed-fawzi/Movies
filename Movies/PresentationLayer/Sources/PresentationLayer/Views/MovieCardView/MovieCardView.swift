@@ -9,6 +9,7 @@ import SwiftUI
 import DomainLayer
 
 
+fileprivate let ids = AccessibilityIds.MovieCardView.self
 // MARK: - MovieCardView
 struct MovieCardView: View {
     let movie: Movie
@@ -48,19 +49,23 @@ private struct MovieCardInfoView: View {
                 .lineLimit(1)
                 .font(.title2)
                 .bold()
+                .accessibilityIdentifier(ids.titleLabel.rawValue)
             
             Text(movie.releaseDate ?? "")
                 .foregroundColor(.textSecondry)
                 .font(.headline)
+                .accessibilityIdentifier(ids.releaseDateLabel.rawValue)
             HStack {
                 Image(systemName: "star.fill")
                     .foregroundColor(.accessory)
                     .imageScale(.large)
+                    .accessibilityIdentifier(ids.scoreIcon.rawValue)
                 
                 Text(String(format: "%.1f", movie.score ?? ""))
                     .foregroundColor(.accessory)
                     .font(.headline)
                     .bold()
+                    .accessibilityIdentifier(ids.scoreLabel.rawValue)
             }
         }.padding(.top,10)
     }
@@ -74,6 +79,7 @@ struct MovieCardPoster: View {
             .scaledToFit()
             .frame(maxWidth: 120,maxHeight: 160)
             .offset(y:-40)
+            .accessibilityIdentifier(ids.posterImage.rawValue)
     }
 }
 

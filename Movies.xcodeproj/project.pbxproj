@@ -45,6 +45,7 @@
 		71FBAADA2C6295A800E86B68 /* MoviesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FBAAD92C6295A800E86B68 /* MoviesApp.swift */; };
 		71FBAADC2C6295D700E86B68 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FBAADB2C6295D700E86B68 /* ContentView.swift */; };
 		71FBAADE2C64593800E86B68 /* DispatchQueueMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FBAADD2C64593800E86B68 /* DispatchQueueMock.swift */; };
+		71FBAAE12C646FEB00E86B68 /* PresentationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 71FBAAE02C646FEB00E86B68 /* PresentationLayer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +131,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71FBAAE12C646FEB00E86B68 /* PresentationLayer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +426,9 @@
 				71BAE01F2C5C154700917346 /* PBXTargetDependency */,
 			);
 			name = MoviesUITests;
+			packageProductDependencies = (
+				71FBAAE02C646FEB00E86B68 /* PresentationLayer */,
+			);
 			productName = MoviesUITests;
 			productReference = 71BAE01D2C5C154700917346 /* MoviesUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -909,6 +914,10 @@
 			productName = Common;
 		};
 		71FBAAD72C60E4D600E86B68 /* PresentationLayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PresentationLayer;
+		};
+		71FBAAE02C646FEB00E86B68 /* PresentationLayer */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PresentationLayer;
 		};

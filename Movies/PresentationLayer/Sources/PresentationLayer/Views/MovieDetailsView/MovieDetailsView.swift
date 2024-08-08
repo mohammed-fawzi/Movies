@@ -8,6 +8,8 @@
 import SwiftUI
 import DomainLayer
 
+fileprivate let ids = AccessibilityIds.MovieDetailsView.self
+
 // MARK: - MovieDetailsView
 struct MovieDetailsView: View {
     @ObservedObject var viewModel: MovieDetailsViewModel
@@ -17,6 +19,7 @@ struct MovieDetailsView: View {
             CachableImage(url: viewModel.poster)
                 .scaledToFill()
                 .frame(maxWidth: .infinity, maxHeight: 250)
+                .accessibilityIdentifier(ids.detailsPosterImage.rawValue)
             VStack {
                 ZStack{
                     RoundedRectangle(cornerRadius: 20)
@@ -49,20 +52,25 @@ fileprivate struct MovieDetailsContent: View {
                     .font(.title)
                     .bold()
                     .foregroundStyle(Color(.textPrimary))
+                    .accessibilityIdentifier(ids.detailsTitleLabel.rawValue)
                 Text(viewModel.genres)
                     .font(.title3)
                     .foregroundStyle(Color(.textTernary))
+                    .accessibilityIdentifier(ids.detailsGenresLabel.rawValue)
                 ScrollView{
                     Text(viewModel.overview)
                         .font(.body)
                         .foregroundStyle(Color(.textSecondry))
+                        .accessibilityIdentifier(ids.detailsOverviewTextView.rawValue)
                 }
                 TagsView(tags: createTags(), selectionEnabled: false)
+                    .accessibilityIdentifier(ids.detailsTagsView.rawValue)
             }
             .padding()
         }
         .frame(maxWidth: .infinity,maxHeight:300)
         .background(Color(.clear))
+        
     }
 }
 
@@ -87,6 +95,7 @@ fileprivate struct GoToHomeButton: View {
         .background(Color(.buttonPrimary))
         .cornerRadius(25)
         .padding(.top,20)
+        .accessibilityIdentifier(ids.gotoHomeButton.rawValue)
     }
 }
 
