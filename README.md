@@ -1,5 +1,5 @@
 
-# Movies App
+# Movies App (UIKit-Modularized)
 
 ##  Clip
 
@@ -14,7 +14,7 @@ https://i.ibb.co/GCNHv2x/Movies-App.gif
 
 ##  Deploy
 just add your API key in 
-Movies/Data/Network/EndPoints/Constants
+Movies/DataLayer/Network/EndPoints/Constants
 
 ## Technical Decisions
 
@@ -24,17 +24,30 @@ MVVM with clean Architechture
 
 ![Alt Text](https://i.ibb.co/pJ4ZrcK/Clean-architechure.jpg)
 
-### 2.   Reusability
+### 2.   Modularity
+We have 2 options for implementing modularity:
+  1. Modularize by layer (Data-Domain-Presentation)
+  2. Modularize by feature
+
+ -each of them has its pros and cons I will go with option 1 and modularize by layer as it's easier to start with, it can allow for parallel development for the same feature and no conflicts between layers, and did use this in migrating the project to SwiftUI and only presentation layer is impacted.
+   1.	Data Layer:
+        -	Contains networking code, API clients, database management, and data models.
+   2.	Domain Layer:
+    	  -	Contains business logic, use cases, and domain entities.
+   3.	Presentation Layer:
+  	    -	Contains view controllers, views, view models, coordinators, dependencies containers, and any presentation logic.
+
+### 3.   Reusability
 - Reusable local and remote sources to serve the entire app.
 - As all three tabs for (Trending, Popular, Upcoming) Lists are identical in terms of the UI design and functionality, I will create a reusable (view controller, XIB, view model, use case, Repo) and create three different instances, only changing the endpoint they will communicate with.
 
-### 3.   Dependency Management
+### 4.   Dependency Management
 A dependency container technique serves the whole app, unifies all creation logic in one place, and can easily be tweaked to include child containers for each module for a more modular approach and smaller files.
 
-### 4.   Navigation
+### 5.   Navigation
 An App Coordinator is used, which starts with a root navigation controller and handles all the navigation logic. It can also be easily tweaked to include child coordinators for each module for a more modular approach and smaller files.
 
-### 5.   Offline Support
+### 6.   Offline Support
 ##### -  **API Response**
 As our app needs no data manipulation and just simple read operations, we can cache API responses directly without mapping them to a core data model for offline support, which offers several benefits:
 
@@ -60,7 +73,7 @@ which is a native solution provided to us by Apple and will give us several bene
 2- **Using NSCache**:
 used with a memory limit to store created images in memory for faster rendering.
 
-#### 4.   Unit Testing
+#### 7.   Unit Testing
 For unit testing, I always follow the below rules.
 - **Only test public interfaces**
     - only test the public interfaces and never the private ones directly, as they should be tested via the public methods that call them.
@@ -71,6 +84,6 @@ For unit testing, I always follow the below rules.
     - this naming convention helps a lot in understanding the unit covered by the test case.
     - serve as a replacement for documentation, as you can read each function test case and understand all its functionalities.
 
-#### 5.   Commits
+#### 8.   Commits
 I tend to use [conventinal commits](https://www.conventionalcommits.org/en/v1.0.0/ "conventinal commits") which leads to better readability and communication across team members.
 
