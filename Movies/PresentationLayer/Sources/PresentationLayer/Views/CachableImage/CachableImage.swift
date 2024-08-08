@@ -18,12 +18,14 @@ struct CachableImage: View {
             .resizable()
             .onAppear{
                 ImageLoader.shared.loadImage(from: url) { image in
-                    self.image = Image(uiImage: image!)
+                    guard let image = image else {return}
+                    self.image = Image(uiImage: image)
                 }
             }
             .onChange(of: url) { _, _ in
                 ImageLoader.shared.loadImage(from: url) { image in
-                    self.image = Image(uiImage: image!)
+                    guard let image = image else {return}
+                    self.image = Image(uiImage: image)
                 }
             }
             
