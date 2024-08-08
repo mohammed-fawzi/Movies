@@ -13,12 +13,13 @@ import XCTest
 final class MovieDetailstViewModelTests: XCTestCase {
     var sut: MovieDetailsViewModel!
     var useCaseMock = MovieUseCaseMock()
+    let dispatchQueueMock = DispatchQueueMock()
     let movie = MovieStub.movie1
-    var coordinatorMock = CoordinatorMock()
     override func setUpWithError() throws {
+        useCaseMock.status = .success
         sut = MovieDetailsViewModel(useCase: useCaseMock,
                                     movie: movie,
-                                    coordinator: coordinatorMock)
+                                    dispatchQueue: dispatchQueueMock)
     }
 }
 
@@ -32,30 +33,19 @@ extension MovieDetailstViewModelTests{
         XCTAssertEqual(sut.poster, movie.posterUrl)
     }
 }
-// MARK: - viewDidLoad
+// MARK: - init
 extension MovieDetailstViewModelTests{
-    func testViewDidload_fetchMovieDetails(){
-        //when
-        sut.viewDidLoad()
+    func testInit_fetchMovieDetails(){
         //then
         XCTAssertTrue(useCaseMock.getMovieIsCalled)
         XCTAssertEqual(useCaseMock.getMovieReceivedArguments?.id, movie.id)
     }
     
-    func testViewDidload_fetchDetailsSuccess_setGenres(){
-        //given
-        useCaseMock.status = .success
-        //when
-        sut.viewDidLoad()
-        //then
+    func testInit_fetchDetailsSuccess_setGenres(){
         XCTAssertEqual(sut.genres, "adventure, scifi, action")
     }
     
-    func testViewDidload_fetchDetailsSuccess_setDetailsTags(){
-        //given
-        useCaseMock.status = .success
-        //when
-        sut.viewDidLoad()
+    func testInit_fetchDetailsSuccess_setDetailsTags(){
         //then
         XCTAssertEqual(sut.tags.count, 7)
         // spoken language tag
@@ -93,23 +83,11 @@ extension MovieDetailstViewModelTests{
         useCaseMock.status = .failure(error: .noInternetConnection)
 
         //when
-        sut.viewDidLoad()
+        sut = MovieDetailsViewModel(useCase: useCaseMock,
+                                           movie: movie,
+                                           dispatchQueue: dispatchQueueMock)
         
         //then
         XCTAssertEqual(sut.errorMessage, MoviesError.noInternetConnection.customMessage)
-    }
-}
-
-// MARK: - homePageButtonDidTapped
-extension MovieDetailstViewModelTests {
-    func testHomePageButtonDidTapped_redirectToBrowser(){
-        //given
-        useCaseMock.status = .success
-        //when
-        sut.viewDidLoad()
-        sut.homePageButtonDidTapped()
-        //then
-        XCTAssertTrue(coordinatorMock.openExternalURLIsCalled)
-        XCTAssertEqual(coordinatorMock.openExternalURLReceivedUrl, "http://Test.com")
     }
 }

@@ -38,8 +38,9 @@ class MoviesListViewModel: ObservableObject {
     @Published private(set) var showFooterActivityIndicator: Bool = false
     @Published private(set) var showEmptyState: Bool = false
     @Published var showErrorAlert: Bool = false
-
     var errorMessage: String = ""
+
+    private let dispatchQueue: DispatchQueueType
 
     // MARK: - Subjects
     private var reloadSubject = PassthroughSubject<Void,Never>()
@@ -48,9 +49,11 @@ class MoviesListViewModel: ObservableObject {
     }
 
     init(moviesListUseCase: MoviesListUseCaseProtocol,
-         genresUseCase: GenresUseCaseProtocol) {
+         genresUseCase: GenresUseCaseProtocol,
+         dispatchQueue: DispatchQueueType = DispatchQueue.main) {
         self.moviesListUseCase = moviesListUseCase
         self.genresUseCase = genresUseCase
+        self.dispatchQueue = dispatchQueue
         getData()
     }
     
@@ -69,7 +72,8 @@ class MoviesListViewModel: ObservableObject {
 extension MoviesListViewModel {
     private func getMovies(page: Int){
         moviesListUseCase.getMovies(page: page) { [weak self] (response: Result<MoviesList, MoviesError>) in
-            DispatchQueue.main.async{
+           
+            self?.dispatchQueue.async{
                 self?.showFooterActivityIndicator = false
                 switch response {
                 case .success(let movies):
@@ -104,7 +108,7 @@ extension MoviesListViewModel {
 extension MoviesListViewModel {
     private func getGenres(){
         genresUseCase.getGenres() { [weak self] (response: Result<[Genre], MoviesError>) in
-            DispatchQueue.main.async {
+            self?.dispatchQueue.async {
                 switch response {
                 case .success(let genres):
                     self?.handleFetchingGenresSuccess(genres: genres)

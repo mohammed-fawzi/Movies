@@ -24,10 +24,15 @@ class MovieDetailsViewModel: ObservableObject {
     @Published var showErrorAlert: Bool = false
     @Published private(set) var errorMessage = ""
     var destinationUrl: URL?
+    private let dispatchQueue: DispatchQueueType
     
-    init(useCase: MovieUseCaseProtocol, movie: Movie) {
+    init(useCase: MovieUseCaseProtocol,
+         movie: Movie,
+         dispatchQueue: DispatchQueueType = DispatchQueue.main
+    ) {
         self.movie = movie
         self.useCase = useCase
+        self.dispatchQueue = dispatchQueue
         setIntialMovieDetails()
         GetDetails()
     }
@@ -37,7 +42,7 @@ class MovieDetailsViewModel: ObservableObject {
 extension MovieDetailsViewModel {
     private func GetDetails(){
         useCase.getMovie(withId: movie.id) { [weak self] result in
-            DispatchQueue.main.async {
+            self?.dispatchQueue.async {
                 switch result {
                 case .success(let movieDetails):
                     self?.handleFetchingMovieDetailsSuccess(movieDetails: movieDetails)

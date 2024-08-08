@@ -16,14 +16,3 @@ extension Movie: Equatable {
         return lhs.id == rhs.id
      }
 }
-
-extension Module: Equatable {
-    static public func == (lhs: Module, rhs: Module) -> Bool {
-        switch (lhs, rhs) {
-        case let (.movieDetails(movie: a), .movieDetails(movie: b)):
-          return a == b
-        default:
-          return false
-        }
-    }
-}

@@ -16,246 +16,147 @@ final class MoviesListViewModelTests: XCTestCase {
     var sut: MoviesListViewModel!
     var moviesListUseCaseMock = MoviesListUseCaseMock()
     var genresUseCaseMock = GenresUseCaseMock()
-    var coordinatorMock = CoordinatorMock()
+    var dispatchQueueMock = DispatchQueueMock()
     
-    var cancellables: Set<AnyCancellable>!
     override func setUpWithError() throws {
-        cancellables = []
+        moviesListUseCaseMock.status = .success
         sut = MoviesListViewModel(moviesListUseCase: moviesListUseCaseMock,
                                   genresUseCase: genresUseCaseMock,
-                                  coordinator: coordinatorMock)
+                                  dispatchQueue: dispatchQueueMock)
     }
 }
 
-// MARK: - ViewDidLoad
+// MARK: - Init
 extension MoviesListViewModelTests {
-    func testViewDidLoad_fetchMoviesFirstPage(){
-        //when
-        sut.viewDidLoad()
+    func testInit_fetchMoviesFirstPage(){
         //then
         XCTAssertTrue(moviesListUseCaseMock.getMoviesIsCalled)
         XCTAssertEqual(moviesListUseCaseMock.getMoviesReceivedArguments?.page, 1)
     }
     
     //as data is stubbed no need for expectation
-    func testViewDidLoad_fetchMovies_stopFooterActivityIndicator(){
-        //given
-        var showSignal: Bool = true
-        sut.showFooterActivityIndicator.sink { show in
-            showSignal = show
-        }.store(in: &cancellables)
-        
-        //when
-        sut.viewDidLoad()
-        
+    func testViewInit_fetchMovies_stopFooterActivityIndicator(){
         //then
-        XCTAssertFalse(showSignal)
+        XCTAssertFalse(sut.showFooterActivityIndicator)
     }
     
-    func testViewDidLoad_fetchMoviesSuccess_appendNewMoviesAndReload(){
-        //given
+    func testViewInit_fetchMoviesSuccess_appendNewMovies(){
         moviesListUseCaseMock.status = .success
-
         //when
-        var reload = false
-        sut.reloadTable.sink { show in
-            reload = true
-        }.store(in: &cancellables)
-        sut.viewDidLoad()
-        
+        sut = MoviesListViewModel(moviesListUseCase: moviesListUseCaseMock,
+                                  genresUseCase: genresUseCaseMock,
+                                  dispatchQueue: dispatchQueueMock)
+   
         //then
         XCTAssertEqual(sut.getNumberOfMovies(), 3)
-        XCTAssertTrue(reload)
     }
     
     
-    func testViewDidLoad_fetchMoviesFailureNoCache_showEmptyState(){
+    func testViewInit_fetchMoviesFailureNoCache_showEmptyState(){
         //given
         moviesListUseCaseMock.status = .failure(error: .noCacheFound)
-
+       
         //when
-        var showEmptyState = false
-        sut.showEmptyState.sink { _ in
-            showEmptyState = true
-        }.store(in: &cancellables)
-        sut.viewDidLoad()
+        sut = MoviesListViewModel(moviesListUseCase: moviesListUseCaseMock,
+                                  genresUseCase: genresUseCaseMock,
+                                  dispatchQueue: dispatchQueueMock)
         
         //then
-        XCTAssertTrue(showEmptyState)
+        XCTAssertTrue(sut.showEmptyState)
     }
     
-    func testViewDidLoad_fetchMoviesFailureAnyError_showErorrWithNoEmptyState(){
+    func testInit_fetchMoviesFailureAnyError_showErorrWithNoEmptyState(){
         //given
         moviesListUseCaseMock.status = .failure(error: .noInternetConnection)
 
         //when
-        var showEmptyState = true
-        sut.showErrorAlert.sink { _ in
-            showEmptyState = false
-        }.store(in: &cancellables)
-        
-        var recivedMessage = ""
-        sut.showErrorAlert.sink { message in
-            recivedMessage = message
-        }.store(in: &cancellables)
-        sut.viewDidLoad()
+        sut = MoviesListViewModel(moviesListUseCase: moviesListUseCaseMock,
+                                  genresUseCase: genresUseCaseMock,
+                                  dispatchQueue: dispatchQueueMock)
         
         //then
-        XCTAssertFalse(showEmptyState)
-        XCTAssertEqual(recivedMessage, MoviesError.noInternetConnection.customMessage)
+        XCTAssertFalse(sut.showEmptyState)
+        XCTAssertEqual(sut.errorMessage, MoviesError.noInternetConnection.customMessage)
     }
     
 }
 
-// MARK: - didSelectCell
-extension MoviesListViewModelTests {
-    func testDidSelectCell_navigateToDetailsScreen(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
-        //when
-        sut.didSelectCell(atIndex: 0)
-        //then
-        let recivedModule = coordinatorMock.navigateReceivedArguments?.module
-        let expectedModule = Module.movieDetails(movie: MovieStub.movie1)
-        XCTAssertTrue(coordinatorMock.navigateIsCalled)
-        XCTAssertEqual(recivedModule, expectedModule)
-    }
-}
 
 
-// MARK: - willShowCell
+// MARK: - didShowRow
 extension MoviesListViewModelTests {
-    func testWillShowCell_notLastCell_doNothing(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
+    func testDidShowRow_notLastCell_doNothing(){
         //when
-        sut.willShowCell(atIndex: 0)
+        sut.didShowRow(atIndex: 0)
         //then
         let recivedPage = moviesListUseCaseMock.getMoviesReceivedArguments?.page
         XCTAssertNotEqual(recivedPage, 2)
     }
     
-    func testWillShowCell_lastCell_fetchNextPage(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
+    func testDidShowRow_lastCell_fetchNextPage(){
         //when
-        sut.willShowCell(atIndex: 2)
+        sut.didShowRow(atIndex: 2)
         //then
         let recivedPage = moviesListUseCaseMock.getMoviesReceivedArguments?.page
         XCTAssertEqual(recivedPage, 2)
-    }
-    
-    func testWillShowCell_lastCell_startFooterActivityIndicator(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
-       
-        //when
-        var showSignal: Bool = false
-        sut.showFooterActivityIndicator.first().sink { show in
-            showSignal = show
-        }.store(in: &cancellables)
-        sut.willShowCell(atIndex: 2)
-        
-        //then
-        XCTAssertTrue(showSignal)
     }
 
 }
 
 // MARK: - searchButtonDidTapped
 extension MoviesListViewModelTests {
-    func testSearchButtonDidTapped_textNotEmpty_filterMoviesAndReload(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
-
+    func testSearchButtonDidTapped_textNotEmpty_filterMovies(){
         //when
-        var reload = false
-        sut.reloadTable.sink { show in
-            reload = true
-        }.store(in: &cancellables)
         sut.searchButtonDidTapped(withText: "Joker")
         
         //then
         XCTAssertEqual(sut.getNumberOfMovies(), 1)
         XCTAssertEqual(sut.getMovie(atIndex: 0), MovieStub.movie2)
-        XCTAssertTrue(reload)
     }
 }
 
 
 // MARK: - cancelSearchButtonDidTapped
 extension MoviesListViewModelTests {
-    func testCancelSearchButtonDidTapped_removeAllfilterdAndReload(){
+    func testCancelSearchButtonDidTapped_removeAllfilterd(){
         //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
         sut.searchButtonDidTapped(withText: "Joker")
-
         //when
-        var reload = false
-        sut.reloadTable.sink { show in
-            reload = true
-        }.store(in: &cancellables)
+      
         sut.cancelSearchButtonDidTapped()
         //then
         XCTAssertEqual(sut.getNumberOfMovies(), 3)
-        XCTAssertTrue(reload)
     }
 }
 
 // MARK: - didSelectTag
 extension MoviesListViewModelTests {
-    func testDidSelectTag_actionTag_filterAllActionMoviesAndReload(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
-
+    func testDidSelectTag_actionTag_filterAllActionMovies(){
         //when
-        var reload = false
-        sut.reloadTable.sink { show in
-            reload = true
-        }.store(in: &cancellables)
-        sut.didSelectTag(withId: 28)
+        sut.didTapFilter(28, true)
         
         //then
         XCTAssertEqual(sut.getNumberOfMovies(), 2)
         XCTAssertEqual(sut.getMovie(atIndex: 0), MovieStub.movie1)
         XCTAssertEqual(sut.getMovie(atIndex: 1), MovieStub.movie3)
-        XCTAssertTrue(reload)
     }
 }
 
 // MARK: - didDeselectTag
 extension MoviesListViewModelTests {
     func testDidDeselectTag_removeFilterationAndReload(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
-        sut.didSelectTag(withId: 28)
+        sut.didTapFilter(28, true)
 
         //when
-        var reload = false
-        sut.reloadTable.sink { show in
-            reload = true
-        }.store(in: &cancellables)
-        sut.didDeselectTag(withId: 28)
+        sut.didTapFilter(28, false)
         //then
         XCTAssertEqual(sut.getNumberOfMovies(), 3)
-        XCTAssertTrue(reload)
     }
 }
 
 // MARK: - Refresh
 extension MoviesListViewModelTests {
     func testRefresh_startFromFirstPageAgain(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
         //when
         sut.refresh()
         //then
@@ -265,13 +166,10 @@ extension MoviesListViewModelTests {
 }
 
 
-
 // MARK: - Getters
 extension MoviesListViewModelTests {
     func testGetNumberOfMovies_searchModeOn_returnSearchCount(){
         //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
         sut.searchButtonDidTapped(withText: "Joker")
         //when
         let numOfMovies = sut.getNumberOfMovies()
@@ -280,10 +178,6 @@ extension MoviesListViewModelTests {
     }
     
     func testGetNumberOfMovies_searchModeOff_returnNormalCount(){
-        //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
-
         //when
         let numOfMovies = sut.getNumberOfMovies()
         //then
@@ -292,8 +186,6 @@ extension MoviesListViewModelTests {
     
     func testGetMovie_searchModeOn_returnMovieFromSearchResult(){
         //given
-        moviesListUseCaseMock.status = .success
-        sut.viewDidLoad()
         sut.searchButtonDidTapped(withText: "Joker")
         //when
         let movie = sut.getMovie(atIndex: 0)
