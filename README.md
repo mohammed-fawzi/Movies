@@ -1,5 +1,5 @@
 
-# Movies App (UIKit-Modularized)
+# Movies App (SwiftUI-Modularized)
 
 ##  Clip
 
@@ -39,15 +39,12 @@ We have 2 options for implementing modularity:
 
 ### 3.   Reusability
 - Reusable local and remote sources to serve the entire app.
-- As all three tabs for (Trending, Popular, Upcoming) Lists are identical in terms of the UI design and functionality, I will create a reusable (view controller, XIB, view model, use case, Repo) and create three different instances, only changing the endpoint they will communicate with.
+- As all three tabs for (Trending, Popular, Upcoming) Lists are identical in terms of the UI design and functionality, I will create a reusable list (views, view model, use case, Repo) and create three different instances, only changing the endpoint they will communicate with.
 
 ### 4.   Dependency Management
 A dependency container technique serves the whole app, unifies all creation logic in one place, and can easily be tweaked to include child containers for each module for a more modular approach and smaller files.
 
-### 5.   Navigation
-An App Coordinator is used, which starts with a root navigation controller and handles all the navigation logic. It can also be easily tweaked to include child coordinators for each module for a more modular approach and smaller files.
-
-### 6.   Offline Support
+### 5.   Offline Support
 ##### -  **API Response**
 As our app needs no data manipulation and just simple read operations, we can cache API responses directly without mapping them to a core data model for offline support, which offers several benefits:
 
@@ -73,7 +70,7 @@ which is a native solution provided to us by Apple and will give us several bene
 2- **Using NSCache**:
 used with a memory limit to store created images in memory for faster rendering.
 
-#### 7.   Unit Testing
+#### 6.   Unit Testing
 For unit testing, I always follow the below rules.
 - **Only test public interfaces**
     - only test the public interfaces and never the private ones directly, as they should be tested via the public methods that call them.
@@ -84,6 +81,6 @@ For unit testing, I always follow the below rules.
     - this naming convention helps a lot in understanding the unit covered by the test case.
     - serve as a replacement for documentation, as you can read each function test case and understand all its functionalities.
 
-#### 8.   Commits
+#### 7.   Commits
 I tend to use [conventinal commits](https://www.conventionalcommits.org/en/v1.0.0/ "conventinal commits") which leads to better readability and communication across team members.
 
